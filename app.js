@@ -8,6 +8,8 @@ const flash = require('connect-flash');
 const fileUpload = require('express-fileupload');
 const { SitemapStream, streamToPromise } = require('sitemap');
 
+const Product = require('./models/Product');
+
 dotenv.config();
 
 const app = express();
@@ -67,7 +69,16 @@ app.use('/payment', require('./routes/payment')); // checkout & stripe
 // Static pages
 app.get('/about', (req, res) => res.render('about'));
 app.get('/contact', (req, res) => res.render('contact'));
-app.get('/', (req, res) => res.render('index'));
+app.get('/', async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 }); // latest first
+    res.render('index', { products, user: req.session.user || null });
+  } catch (err) {
+    console.error(err);
+    res.render('index', { products: [], user: req.session.user || null });
+  }
+});
+
 
 // ------------------ SITEMAP ------------------
 app.get('/sitemap.xml', async (req, res) => {
