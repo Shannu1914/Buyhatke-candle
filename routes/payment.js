@@ -11,8 +11,8 @@ const razorpay = new Razorpay({
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
 
-// Checkout page
-router.get('/checkout', async (req, res) => {
+// ------------------ Checkout page ------------------
+router.get('/checkout', (req, res) => {
   if (!req.session.cart || req.session.cart.length === 0) {
     req.flash('error_msg', 'Your cart is empty.');
     return res.redirect('/cart');
@@ -28,7 +28,7 @@ router.get('/checkout', async (req, res) => {
   });
 });
 
-// Create Razorpay order
+// ------------------ Create Razorpay order ------------------
 router.post('/create-order', async (req, res) => {
   try {
     const cart = req.session.cart || [];
@@ -51,7 +51,7 @@ router.post('/create-order', async (req, res) => {
   }
 });
 
-// Verify payment
+// ------------------ Verify payment ------------------
 router.post('/verify', async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
 

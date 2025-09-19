@@ -1,18 +1,21 @@
 <%- include('partials/header', { title: 'Payment Status' }) %>
 
-<section class="payment-status container">
+<section class="payment-status container text-center py-20">
   <% if (payment.success) { %>
-    <div class="alert success">
-      <h2>Payment Successful!</h2>
-      <p>Order ID: <%= payment.orderId %></p>
-      <p>Total Paid: ₹<%= payment.amount %></p>
-      <a href="/user/orders" class="btn btn-primary">View My Orders</a>
-      <a href="/shop" class="btn btn-secondary">Continue Shopping</a>
+    <div class="alert success p-6 rounded-lg shadow-md bg-green-100">
+      <h2 class="text-2xl font-bold mb-4 text-green-700">Payment Successful!</h2>
+      <p class="mb-2">Order ID: <strong><%= payment.orderId %></strong></p>
+      <% if(payment.razorpayPaymentId){ %>
+        <p class="mb-2">Payment ID: <strong><%= payment.razorpayPaymentId %></strong></p>
+      <% } %>
+      <p class="mb-6">Total Paid: <strong>₹<%= payment.amount %></strong></p>
+      <a href="/user/orders" class="btn btn-primary mr-2 mb-2">View My Orders</a>
+      <a href="/shop" class="btn btn-secondary mb-2">Continue Shopping</a>
     </div>
   <% } else { %>
-    <div class="alert error">
-      <h2>Payment Failed!</h2>
-      <p>Reason: <%= payment.message %></p>
+    <div class="alert error p-6 rounded-lg shadow-md bg-red-100">
+      <h2 class="text-2xl font-bold mb-4 text-red-700">Payment Failed!</h2>
+      <p class="mb-6">Reason: <%= payment.message %></p>
       <a href="/checkout" class="btn btn-primary">Try Again</a>
     </div>
   <% } %>
