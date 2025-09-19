@@ -50,4 +50,19 @@
         // 3️⃣ Verify on backend
         await fetch("/payment/payment-verification", {
           method: "POST",
-          headers:
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            paymentId: paymentIntent.id,
+            status: paymentIntent.status,
+            amount: totalAmount
+          })
+        });
+        window.location.href = "/payment/payment-verification";
+      }
+    } catch (err) {
+      alert("Something went wrong: " + err.message);
+    }
+  });
+</script>
+
+<%- include('partials/footer') %>
