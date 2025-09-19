@@ -7,11 +7,29 @@
 }
 
 body {
-  background: #f5f7fa;
   font-size: 18px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   color: #333;
   line-height: 1.6;
+
+  /* Background image */
+  background: url('/images/home-bg.jpg') no-repeat center center / cover;
+  position: relative;
+  min-height: 100vh;
+}
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); /* light faded overlay */
+  z-index: 0;
+}
+
+header, main, footer, section {
+  position: relative;
+  z-index: 1;
 }
 
 a {
