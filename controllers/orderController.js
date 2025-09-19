@@ -1,8 +1,14 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
-const stripe = require('stripe')(process.env.STRIPE_SECRET);
+const Razorpay = require('razorpay');
+const crypto = require('crypto');
 
-// Render checkout page (GET /checkout)
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET
+});
+
+// Render checkout page
 exports.checkoutPage = (req, res) => {
   const cart = req.session.cart || { items: [], total: 0 };
   if (!req.session.user) {
@@ -12,7 +18,7 @@ exports.checkoutPage = (req, res) => {
   res.render('checkout', { cart, user: req.session.user });
 };
 
-// Create payment intent and create an Order with pending payment (POST /checkout/pay)
+// Create Razorpay payment order
 exports.createPayment = async (req, res) => {
   try {
     const cart = req.session.cart;
@@ -45,18 +51,28 @@ exports.createPayment = async (req, res) => {
     });
     await order.save();
 
-    // Create Stripe Payment Intent
-    const paymentIntent = await stripe.paymentIntents.create({
+    // Create Razorpay order
+    const options = {
       amount: Math.round(cart.total * 100), // in paise
-      currency: 'inr',
-      metadata: { orderId: order._id.toString() }
-    });
+      currency: "INR",
+      receipt: `order_rcptid_${order._id}`,
+    };
 
-    // Save stripe intent id
-    order.stripePaymentIntentId = paymentIntent.id;
+    const paymentOrder = await razorpay.orders.create(options);
+    order.razorpayOrderId = paymentOrder.id;
     await order.save();
 
-    res.render('payment-verification', { payment: { clientSecret: paymentIntent.client_secret, orderId: order._id }, user: req.session.user });
+    // Send order info to frontend for Razorpay checkout
+    res.render('payment-verification', {
+      payment: {
+        orderId: order._id,
+        razorpayOrderId: paymentOrder.id,
+        amount: cart.total,
+        currency: 'INR'
+      },
+      user: req.session.user
+    });
+
   } catch (err) {
     console.error(err);
     req.flash('error_msg', 'Payment creation failed');
@@ -64,50 +80,48 @@ exports.createPayment = async (req, res) => {
   }
 };
 
-// Stripe webhook endpoint (POST /webhook/stripe)
-exports.stripeWebhook = async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  let event;
+// Verify Razorpay payment
+exports.verifyPayment = async (req, res) => {
   try {
-    event = stripe.webhooks.constructEvent(req.rawBody, sig, process.env.STRIPE_WEBHOOK_SECRET);
+    const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
+
+    const order = await Order.findOne({ razorpayOrderId: razorpay_order_id });
+    if (!order) throw new Error('Order not found');
+
+    // Verify signature
+    const generated_signature = crypto
+      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+      .update(razorpay_order_id + "|" + razorpay_payment_id)
+      .digest('hex');
+
+    if (generated_signature !== razorpay_signature) {
+      throw new Error('Payment verification failed');
+    }
+
+    // Payment successful
+    order.paymentStatus = 'Paid';
+    order.status = 'Pending'; // admin will update to shipped
+    await order.save();
+
+    // Clear cart
+    req.session.cart = [];
+
+    res.render('payment-success', { order, user: req.session.user });
+
   } catch (err) {
-    console.error('Webhook signature verification failed.', err.message);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
+    console.error(err);
+    req.flash('error_msg', 'Payment verification failed');
+    res.redirect('/checkout');
   }
-
-  if (event.type === 'payment_intent.succeeded') {
-    const paymentIntent = event.data.object;
-    const orderId = paymentIntent.metadata.orderId;
-    const order = await Order.findById(orderId);
-    if (order) {
-      order.paymentStatus = 'Paid';
-      order.status = 'Pending'; // admin will update to shipped
-      await order.save();
-      // Clear user's session cart if you want to (cannot access session here easily)
-    }
-  }
-
-  if (event.type === 'payment_intent.payment_failed') {
-    const paymentIntent = event.data.object;
-    const orderId = paymentIntent.metadata.orderId;
-    const order = await Order.findById(orderId);
-    if (order) {
-      order.paymentStatus = 'Failed';
-      await order.save();
-    }
-  }
-
-  res.json({ received: true });
 };
 
 // User order list
 exports.userOrders = async (req, res) => {
   const orders = await Order.find({ user: req.session.user._id }).populate('items.product').sort({ createdAt: -1 });
-  // returns orders for rendering user dashboard
   res.render('user-dashboard', { user: req.session.user, orders, returns: [] });
 };
 
-// Admin: update order status (POST /admin/orders/:id/update)
+// Admin: update order status
 exports.updateOrderStatus = async (req, res) => {
   const order = await Order.findById(req.params.id);
   if (!order) {
