@@ -1,0 +1,76 @@
+<%- include('partials/header', { title: 'Admin Dashboard', active: 'admin' }) %>
+
+<section class="admin-dashboard container">
+  <h1>Admin Dashboard</h1>
+
+  <div class="dashboard-grid">
+    <!-- Products Management -->
+    <div class="card">
+      <h2>Manage Products</h2>
+
+      <form method="POST" action="/admin/products/add" enctype="multipart/form-data">
+        <input type="text" name="name" placeholder="Product Name" required />
+        <textarea name="description" placeholder="Product Description" required></textarea>
+        <input type="number" name="price" placeholder="Price" required />
+        <input type="file" name="image" accept=".jpg,.jpeg,.png" required />
+        <button type="submit" class="btn btn-primary">Add Product</button>
+      </form>
+
+      <h3>Existing Products</h3>
+      <ul>
+        <% products.forEach(product => { %>
+          <li>
+            <img src="/uploads/products/<%= product.image %>" alt="<%= product.name %>" width="50" />
+            <%= product.name %> - ₹<%= product.price %>
+            <form method="POST" action="/admin/products/delete/<%= product._id %>" style="display:inline;">
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </li>
+        <% }) %>
+      </ul>
+    </div>
+
+    <!-- Orders Management -->
+    <div class="card">
+      <h2>Manage Orders</h2>
+      <% if (orders.length === 0) { %>
+        <p>No orders yet.</p>
+      <% } else { %>
+        <table class="dashboard-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>User</th>
+              <th>Total</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% orders.forEach(order => { %>
+              <tr>
+                <td><%= order._id %></td>
+                <td><%= order.user.name %></td>
+                <td>₹<%= order.total %></td>
+                <td><%= order.status %></td>
+                <td>
+                  <form method="POST" action="/admin/orders/<%= order._id %>/update">
+                    <select name="status">
+                      <option <%= order.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                      <option <%= order.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
+                      <option <%= order.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                      <option <%= order.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                    </select>
+                    <button type="submit" class="btn btn-secondary">Update</button>
+                  </form>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

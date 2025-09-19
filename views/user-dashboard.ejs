@@ -1,0 +1,68 @@
+<%- include('partials/header', { title: 'My Dashboard', active: 'dashboard' }) %>
+
+<section class="user-dashboard container">
+  <h1>Welcome, <%= user.name %></h1>
+
+  <div class="dashboard-tabs">
+    <button onclick="showTab('orders')">My Orders</button>
+    <button onclick="showTab('returns')">Returns / Refunds</button>
+  </div>
+
+  <div id="orders" class="tab-content">
+    <h2>Previous & Ongoing Orders</h2>
+    <% if (orders.length === 0) { %>
+      <p>No orders yet.</p>
+    <% } else { %>
+      <table class="dashboard-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Total</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% orders.forEach(order => { %>
+            <tr>
+              <td><%= order._id %></td>
+              <td><%= order.createdAt.toDateString() %></td>
+              <td><%= order.status %></td>
+              <td>₹<%= order.total %></td>
+              <td>
+                <% if(order.status === 'Delivered') { %>
+                  <a href="/user/orders/<%= order._id %>/return" class="btn btn-secondary">Return / Refund</a>
+                <% } else { %>
+                  <span>-</span>
+                <% } %>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+
+  <div id="returns" class="tab-content" style="display:none;">
+    <h2>Return / Refund Requests</h2>
+    <% if (returns.length === 0) { %>
+      <p>No requests submitted.</p>
+    <% } else { %>
+      <ul>
+        <% returns.forEach(req => { %>
+          <li>Order <%= req.orderId %> - <%= req.status %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+  </div>
+</section>
+
+<script>
+  function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+    document.getElementById(tabId).style.display = 'block';
+  }
+</script>
+
+<%- include('partials/footer') %>

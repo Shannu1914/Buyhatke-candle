@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /admin
+Disallow: /login
+Disallow: /register
+Disallow: /articles/upload
+Disallow: /certificates
+
+Allow: /
+Allow: /articles
+Allow: /about
+
+Sitemap: https://shanmukh-trlv.onrender.com/sitemap.xml

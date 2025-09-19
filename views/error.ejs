@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Error</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8d7da;
+      color: #721c24;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background-color: #f5c6cb;
+      border: 1px solid #f1b0b7;
+      border-radius: 8px;
+      padding: 30px 40px;
+      max-width: 600px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      margin-bottom: 15px;
+    }
+    p {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    a {
+      color: #721c24;
+      text-decoration: underline;
+      font-weight: bold;
+    }
+    a:hover {
+      color: #4a0f13;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Oops! Something went wrong.</h1>
+    <p><%= error.message || "An unexpected error occurred." %></p>
+
+    <% if (error.stack) { %>
+      <pre style="text-align:left; background:#fff; color:#333; padding:15px; border-radius:5px; overflow-x:auto; max-height:300px;">
+<%= error.stack %>
+      </pre>
+    <% } %>
+
+    <p>
+      <a href="/">Go back to Home</a>
+    </p>
+  </div>
+</body>
+</html>

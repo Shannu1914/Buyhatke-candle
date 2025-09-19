@@ -1,0 +1,21 @@
+<%- include('partials/header', { title: product.name }) %>
+
+<section class="product-view container">
+  <div class="product-detail">
+    <img src="/uploads/products/<%= product.image %>" alt="<%= product.name %>" />
+    <div class="product-info">
+      <h1><%= product.name %></h1>
+      <p><strong>Price:</strong> ₹<%= product.price %></p>
+      <p><%= product.description %></p>
+
+      <form method="POST" action="/cart/add/<%= product._id %>">
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity" value="1" min="1" required>
+        <button type="submit" class="btn btn-primary">Add to Cart</button>
+      </form>
+    </div>
+  </div>
+  <a href="/shop" class="btn">⬅ Back to Shop</a>
+</section>
+
+<%- include('partials/footer') %>

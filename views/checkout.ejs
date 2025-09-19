@@ -1,0 +1,53 @@
+<%- include('partials/header', { title: 'Checkout' }) %>
+
+<section class="checkout container">
+  <h2>Checkout</h2>
+
+  <div id="cart-summary">
+    <% cart.forEach(item => { %>
+      <p><%= item.name %> x <%= item.qty %> = ₹<%= item.price * item.qty %></p>
+    <% }) %>
+    <h3>Total: ₹<%= totalAmount %></h3>
+  </div>
+
+  <!-- Stripe Card Element -->
+  <div id="card-element" class="my-3 p-3 border rounded"></div>
+  <div id="card-errors" class="text-danger mb-3"></div>
+
+  <button id="payBtn" class="btn btn-primary">Pay Now</button>
+</section>
+
+<script src="https://js.stripe.com/v3/"></script>
+<script>
+  const stripe = Stripe("<%= stripePublicKey %>");
+  const elements = stripe.elements();
+  const card = elements.create("card");
+  card.mount("#card-element");
+
+  const totalAmount = JSON.parse('<%- JSON.stringify(totalAmount) %>');
+
+  document.getElementById("payBtn").addEventListener("click", async () => {
+    try {
+      // 1️⃣ Ask backend to create PaymentIntent
+      const res = await fetch("/payment/create-payment-intent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: totalAmount })
+      });
+      const data = await res.json();
+
+      // 2️⃣ Confirm card payment with Stripe Elements
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        data.clientSecret,
+        {
+          payment_method: { card }
+        }
+      );
+
+      if (error) {
+        document.getElementById("card-errors").textContent = error.message;
+      } else if (paymentIntent.status === "succeeded") {
+        // 3️⃣ Verify on backend
+        await fetch("/payment/payment-verification", {
+          method: "POST",
+          headers:

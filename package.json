@@ -1,0 +1,35 @@
+{
+  "name": "yr-publication",
+  "version": "1.0.0",
+  "description": "YR Publication website",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^4.6.0",
+    "dotenv": "^16.6.1",
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "express-fileupload": "^1.5.1",
+    "express-flash": "^0.0.2",
+    "express-flash-message": "^3.0.2",
+    "express-session": "^1.18.2",
+    "express-validator": "^6.15.0",
+    "file-upload": "^0.0.0",
+    "mongoose": "^7.8.7",
+    "multer": "^2.0.2",
+    "nodemailer": "^7.0.3",
+    "patch-package": "^8.0.0",
+    "sitemap": "^8.0.0",
+    "stripe": "^18.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "author": "YR Publication",
+  "license": "ISC"
+}

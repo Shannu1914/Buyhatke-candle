@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-site-verification" content="AYQ5PpfUNxzV3dMXgpoFjS7e41h9iothduHFqdGdLbU" />
+
+  <title>Publish Research Articles | YR Publication</title>
+  <meta name="description" content="Publish academic articles and get verified certificates. Fast, affordable journal publication platform.">
+  <meta name="keywords" content="journal publication, publish research, academic publishing, verified certificate, student articles">
+  <meta name="author" content="YR Publication">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph for social sharing -->
+  <meta property="og:title" content="YR Publication" />
+  <meta property="og:description" content="Submit your articles and get published with verified certificates." />
+  <meta property="og:image" content="/images/logo.png" />
+  <meta property="og:url" content="https://shanmukh-trlv.onrender.com" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="/images/logo.png" />
+  <link rel="stylesheet" href="/css/style.css" />
+
+</head>
+
+<body>
+    <div class="page-wrapper"> <!-- 👈 New wrapper starts -->
+  <header>
+    <nav class="navbar">
+  <div class="logo">
+    <a href="/"><img src="/images/logo.png" alt="Logo" /><span class="company-name">YR Publication</span></a>
+  </div>
+
+  <button class="menu-toggle" id="menuToggle">&#9776;</button> <!-- hamburger -->
+
+  <ul class="nav-links" id="navLinks">
+    <li><a href="/" class="<%= active === 'home' ? 'active' : '' %>">Home</a></li>
+    <li><a href="/articles" class="<%= active === 'articles' ? 'active' : '' %>">Articles</a></li>
+    <li><a href="/blog" class="<%= active === 'blog' ? 'active' : '' %>">Blog</a></li>
+    <li><a href="/about" class="<%= active === 'about' ? 'active' : '' %>">About</a></li>
+    <li><a href="/contact" class="<%= active === 'contact' ? 'active' : '' %>">Contact</a></li>
+
+    <% if (!user) { %>
+      <li><a href="/login" class="<%= active === 'login' ? 'active' : '' %>">Login</a></li>
+      <li><a href="/register" class="<%= active === 'register' ? 'active' : '' %>">Register</a></li>
+    <% } else { %>
+      <% if(user.isAdmin) { %>
+        <li><a href="/admin" class="<%= active === 'admin' ? 'active' : '' %>">Admin Dashboard</a></li>
+        <li><a href="/admin/articles">Manage Articles</a></li>
+      <% } else { %>
+        <li><a href="/articles/upload" class="<%= active === 'upload' ? 'active' : '' %>">Upload</a></li>
+      <% } %>
+      <li><a href="/logout">Logout (<%= user.name %>)</a></li>
+    <% } %>
+  </ul>
+</nav>
+  </header>
+  <main>
+  <% if(success_msg && success_msg.length > 0) { %>
+    <div class="alert success"><%= success_msg[0] %></div>
+  <% } %>
+
+  <% if(error_msg && error_msg.length > 0) { %>
+    <div class="alert error"><%= error_msg[0] %></div>
+  <% } %>
+
+

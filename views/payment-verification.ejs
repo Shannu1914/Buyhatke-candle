@@ -1,0 +1,21 @@
+<%- include('partials/header', { title: 'Payment Status' }) %>
+
+<section class="payment-status container">
+  <% if (payment.success) { %>
+    <div class="alert success">
+      <h2>Payment Successful!</h2>
+      <p>Order ID: <%= payment.orderId %></p>
+      <p>Total Paid: ₹<%= payment.amount %></p>
+      <a href="/user/orders" class="btn btn-primary">View My Orders</a>
+      <a href="/shop" class="btn btn-secondary">Continue Shopping</a>
+    </div>
+  <% } else { %>
+    <div class="alert error">
+      <h2>Payment Failed!</h2>
+      <p>Reason: <%= payment.message %></p>
+      <a href="/checkout" class="btn btn-primary">Try Again</a>
+    </div>
+  <% } %>
+</section>
+
+<%- include('partials/footer') %>
