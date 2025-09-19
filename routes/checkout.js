@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const orderController = require('../controllers/orderController');
-const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
+const { isAuthenticated, isAdmin } = require('../Middleware/authMiddleware');
 
 router.get('/', isAuthenticated, orderController.checkoutPage);
 router.post('/pay', isAuthenticated, orderController.createPayment);

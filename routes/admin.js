@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController');
-const { isAuthenticated, isAdmin } = require('../middleware/authMiddleware');
+const { isAuthenticated, isAdmin } = require('../Middleware/authMiddleware');
 const multer = require('multer');
 const path = require('path');
 const storage = multer.diskStorage({
