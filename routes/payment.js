@@ -1,16 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const Razorpay = require('razorpay');
-const crypto = require('crypto');
+const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 const Order = require('../models/Order');
 const Product = require('../models/Product');
-
-// Initialize Razorpay instance
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
 
 // Checkout page
 router.get('/checkout', async (req, res) => {
@@ -25,54 +19,72 @@ router.get('/checkout', async (req, res) => {
   res.render('checkout', {
     cart,
     totalAmount,
-    razorpayKey: process.env.RAZORPAY_KEY_ID,
+    stripePublicKey: process.env.STRIPE_PUBLIC_KEY,
   });
 });
 
-// Create Razorpay order
-router.post('/create-order', async (req, res) => {
+// Create Stripe PaymentIntent
+router.post('/create-payment-intent', async (req, res) => {
   try {
     const cart = req.session.cart || [];
     const totalAmount = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
-    const options = {
+    const paymentIntent = await stripe.paymentIntents.create({
       amount: totalAmount * 100, // in paise
-      currency: 'INR',
-      receipt: `order_rcptid_${Date.now()}`,
-    };
+      currency: 'inr',
+      metadata: { userId: req.session.user?._id || 'guest' },
+    });
 
-    const order = await razorpay.orders.create(options);
-
-    res.json(order);
+    res.json({ clientSecret: paymentIntent.client_secret });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to create Razorpay order' });
+    res.status(500).json({ error: 'Payment initiation failed' });
   }
 });
 
-// Verify payment
-router.post('/verify', async (req, res) => {
-  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
+// Payment verification callback
+router.post('/payment-verification', async (req, res) => {
+  try {
+    const { paymentId, status, amount } = req.body;
 
-  const generated_signature = crypto
-    .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
-    .update(razorpay_order_id + '|' + razorpay_payment_id)
-    .digest('hex');
+    let success = status === 'succeeded';
 
-  if (generated_signature === razorpay_signature) {
-    // Payment successful → create order in DB
-    const order = new Order({
-      user: req.session.user ? req.session.user._id : null,
-      items: req.session.cart.map(c => ({ product: c._id, qty: c.qty })),
-      totalAmount: req.session.cart.reduce((sum, item) => sum + item.price * item.qty, 0),
-      status: 'paid',
+    if (success) {
+      // Create Order
+      const order = new Order({
+        user: req.session.user ? req.session.user._id : null,
+        items: req.session.cart.map((c) => ({ product: c._id, qty: c.qty })),
+        totalAmount: amount,
+        status: 'paid',
+      });
+      await order.save();
+
+      // Clear cart
+      req.session.cart = [];
+
+      return res.render('payment-verification', {
+        payment: {
+          success: true,
+          orderId: order._id,
+          amount,
+        },
+      });
+    } else {
+      return res.render('payment-verification', {
+        payment: {
+          success: false,
+          message: 'Payment failed or cancelled',
+        },
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.render('payment-verification', {
+      payment: {
+        success: false,
+        message: 'Server error verifying payment',
+      },
     });
-    await order.save();
-
-    req.session.cart = []; // clear cart
-    return res.json({ success: true, orderId: order._id });
-  } else {
-    return res.status(400).json({ success: false, message: 'Payment verification failed' });
   }
 });
 
