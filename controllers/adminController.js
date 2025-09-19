@@ -1,30 +1,49 @@
-const path = require('path');
-const User = require(path.join(__dirname, '../models/User'));
+// controllers/adminController.js
+
+const User = require('../models/User');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
 
 // Admin Dashboard
 exports.dashboard = async (req, res) => {
-  const stats = {
-    users: await User.countDocuments(),
-    products: await Product.countDocuments(),
-    orders: await Order.countDocuments(),
-    pendingOrders: await Order.countDocuments({ status: 'pending' }),
-  };
+  try {
+    const stats = {
+      users: await User.countDocuments(),
+      products: await Product.countDocuments(),
+      orders: await Order.countDocuments(),
+      pendingOrders: await Order.countDocuments({ status: 'pending' }),
+    };
 
-  res.render('admin/dashboard', { stats });
+    res.render('admin/dashboard', { stats });
+  } catch (err) {
+    console.error('Error loading dashboard:', err);
+    req.flash('error_msg', 'Failed to load dashboard');
+    res.redirect('/');
+  }
 };
 
 // List all users
 exports.listUsers = async (req, res) => {
-  const users = await User.find();
-  res.render('admin/users', { users });
+  try {
+    const users = await User.find();
+    res.render('admin/users', { users });
+  } catch (err) {
+    console.error('Error listing users:', err);
+    req.flash('error_msg', 'Failed to load users');
+    res.redirect('/admin/dashboard');
+  }
 };
 
 // List all products
 exports.listProducts = async (req, res) => {
-  const products = await Product.find();
-  res.render('admin/products', { products });
+  try {
+    const products = await Product.find();
+    res.render('admin/products', { products });
+  } catch (err) {
+    console.error('Error listing products:', err);
+    req.flash('error_msg', 'Failed to load products');
+    res.redirect('/admin/dashboard');
+  }
 };
 
 // Add new product
@@ -40,12 +59,12 @@ exports.addProduct = async (req, res) => {
       stock,
       image,
     });
-    await product.save();
 
+    await product.save();
     req.flash('success_msg', 'Product added successfully!');
     res.redirect('/admin/products');
   } catch (err) {
-    console.error(err);
+    console.error('Error adding product:', err);
     req.flash('error_msg', 'Error adding product.');
     res.redirect('/admin/products');
   }
@@ -58,7 +77,7 @@ exports.deleteProduct = async (req, res) => {
     req.flash('success_msg', 'Product deleted successfully!');
     res.redirect('/admin/products');
   } catch (err) {
-    console.error(err);
+    console.error('Error deleting product:', err);
     req.flash('error_msg', 'Error deleting product.');
     res.redirect('/admin/products');
   }
@@ -66,8 +85,14 @@ exports.deleteProduct = async (req, res) => {
 
 // List all orders
 exports.listOrders = async (req, res) => {
-  const orders = await Order.find().populate('user').populate('items.product');
-  res.render('admin/orders', { orders });
+  try {
+    const orders = await Order.find().populate('user').populate('items.product');
+    res.render('admin/orders', { orders });
+  } catch (err) {
+    console.error('Error listing orders:', err);
+    req.flash('error_msg', 'Failed to load orders');
+    res.redirect('/admin/dashboard');
+  }
 };
 
 // Update order status (pending → shipped → delivered → returned/refunded)
@@ -79,13 +104,13 @@ exports.updateOrderStatus = async (req, res) => {
       return res.redirect('/admin/orders');
     }
 
-    order.status = req.body.status; // e.g., shipped/delivered/refunded
+    order.status = req.body.status;
     await order.save();
 
     req.flash('success_msg', `Order marked as ${order.status}`);
     res.redirect('/admin/orders');
   } catch (err) {
-    console.error(err);
+    console.error('Error updating order status:', err);
     req.flash('error_msg', 'Error updating order.');
     res.redirect('/admin/orders');
   }
