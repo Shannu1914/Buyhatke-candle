@@ -1,11 +1,47 @@
-  </main>
-  <footer>
-    <div class="footer-content">
-      <p>© 2025 YR Publication | H. no 1-71, Satamrai Village, Shamshabad Mandal, RangaReddy District, Telangana State, 501218.</p>
-      <p>Email: <a href="mailto:YRPublication@gmail.com">YRPublication@gmail.com</a> | Phone: +91 8247047291</p>
+<footer class="bg-gray-900 text-gray-300 py-8 mt-10">
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+    
+    <!-- About / Logo -->
+    <div>
+      <div class="flex items-center space-x-2">
+        <img src="/logo.png" alt="Buyhatke Logo" class="h-8 w-8 object-contain">
+        <h2 class="text-white text-lg font-semibold">Buyhatke</h2>
+      </div>
+      <p class="mt-2 text-sm">
+        Premium handmade candles to light up your moments. Shop online and enjoy fast delivery.
+      </p>
     </div>
-  </footer>
-  </div> <!-- 👈 End wrapper -->
-  <script src="/js/script.js"></script>
-</body>
-</html>
+
+    <!-- Quick Links -->
+    <div>
+      <h2 class="text-white text-lg font-semibold">Quick Links</h2>
+      <ul class="mt-2 space-y-2">
+        <li><a href="/" class="hover:text-pink-500">Home</a></li>
+        <li><a href="/shop" class="hover:text-pink-500">Shop</a></li>
+        <li><a href="/about" class="hover:text-pink-500">About</a></li>
+        <li><a href="/contact" class="hover:text-pink-500">Contact</a></li>
+      </ul>
+    </div>
+
+    <!-- Socials -->
+    <div>
+      <h2 class="text-white text-lg font-semibold">Follow Us</h2>
+      <div class="flex space-x-4 mt-3 text-2xl">
+        <a href="https://instagram.com" target="_blank" rel="noreferrer" class="hover:text-pink-500">
+          <i class="fab fa-instagram"></i>
+        </a>
+        <a href="https://facebook.com" target="_blank" rel="noreferrer" class="hover:text-pink-500">
+          <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://twitter.com" target="_blank" rel="noreferrer" class="hover:text-pink-500">
+          <i class="fab fa-twitter"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Line -->
+  <div class="text-center mt-6 text-sm text-gray-500 border-t border-gray-700 pt-4">
+    © <%= new Date().getFullYear() %> Buyhatke. All rights reserved.
+  </div>
+</footer>
