@@ -1,63 +1,57 @@
-<footer class="bg-gray-900 text-gray-300 py-16 mt-16">
-  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-12">
+<footer class="footer">
+  <div class="footer-container">
 
     <!-- Column 1: Logo + Brand -->
-    <div class="flex flex-col space-y-4">
-      <div class="flex items-center space-x-3">
-        <img src="/images/logo.png" alt="Buyhatke Logo" class="h-12 w-12 object-contain">
-        <h2 class="text-white text-xl font-bold">Buyhatke</h2>
+    <div class="footer-column">
+      <div class="brand">
+        <img src="/images/logo.png" alt="Buyhatke Logo" class="brand-logo">
+        <h2 class="brand-title">Buyhatke</h2>
       </div>
-      <p class="text-base">
+      <p class="brand-text">
         Premium handmade candles to light up your moments. Shop online and enjoy fast delivery.
       </p>
     </div>
 
-    <!-- Column 2: Quick Links (dynamic based on user role) -->
-    <div class="flex flex-col space-y-4">
-      <h2 class="text-white text-xl font-bold">Quick Links</h2>
-      <ul class="space-y-2">
+    <!-- Column 2: Quick Links -->
+    <div class="footer-column">
+      <h2 class="footer-title">Quick Links</h2>
+      <ul class="footer-links">
         <% if (!user) { %>
           <!-- Guest links -->
-          <li><a href="/" class="hover:text-pink-500 transition-colors duration-300">Home</a></li>
-          <li><a href="/products" class="hover:text-pink-500 transition-colors duration-300">Shop</a></li>
-          <li><a href="/about" class="hover:text-pink-500 transition-colors duration-300">About</a></li>
-          <li><a href="/contact" class="hover:text-pink-500 transition-colors duration-300">Contact</a></li>
+          <li><a href="/" class="footer-link">Home</a></li>
+          <li><a href="/products" class="footer-link">Shop</a></li>
+          <li><a href="/about" class="footer-link">About</a></li>
+          <li><a href="/contact" class="footer-link">Contact</a></li>
         <% } else if (user.role === 'user') { %>
           <!-- Logged-in user links -->
-          <li><a href="/products" class="hover:text-pink-500 transition-colors duration-300">Shop</a></li>
-          <li><a href="/cart" class="hover:text-pink-500 transition-colors duration-300">My Cart</a></li>
-          <li><a href="/orders" class="hover:text-pink-500 transition-colors duration-300">My Orders</a></li>
-          <li><a href="/profile" class="hover:text-pink-500 transition-colors duration-300">Profile</a></li>
+          <li><a href="/products" class="footer-link">Shop</a></li>
+          <li><a href="/cart" class="footer-link">My Cart</a></li>
+          <li><a href="/orders" class="footer-link">My Orders</a></li>
+          <li><a href="/profile" class="footer-link">Profile</a></li>
         <% } else if (user.role === 'admin') { %>
           <!-- Admin links -->
-          <li><a href="/admin" class="hover:text-pink-500 transition-colors duration-300">Dashboard</a></li>
-          <li><a href="/admin/products" class="hover:text-pink-500 transition-colors duration-300">Manage Products</a></li>
-          <li><a href="/admin/orders" class="hover:text-pink-500 transition-colors duration-300">Manage Orders</a></li>
-          <li><a href="/admin/users" class="hover:text-pink-500 transition-colors duration-300">Manage Users</a></li>
+          <li><a href="/admin" class="footer-link">Dashboard</a></li>
+          <li><a href="/admin/products" class="footer-link">Manage Products</a></li>
+          <li><a href="/admin/orders" class="footer-link">Manage Orders</a></li>
+          <li><a href="/admin/users" class="footer-link">Manage Users</a></li>
         <% } %>
       </ul>
     </div>
 
     <!-- Column 3: Social Media -->
-    <div class="flex flex-col space-y-4">
-      <h2 class="text-white text-xl font-bold">Follow Us</h2>
-      <div class="flex space-x-6 text-3xl">
-        <a href="https://instagram.com" target="_blank" rel="noreferrer" class="hover:text-pink-500 transition-colors duration-300">
-          <i class="fab fa-instagram"></i>
-        </a>
-        <a href="https://facebook.com" target="_blank" rel="noreferrer" class="hover:text-pink-500 transition-colors duration-300">
-          <i class="fab fa-facebook"></i>
-        </a>
-        <a href="https://twitter.com" target="_blank" rel="noreferrer" class="hover:text-pink-500 transition-colors duration-300">
-          <i class="fab fa-twitter"></i>
-        </a>
+    <div class="footer-column">
+      <h2 class="footer-title">Follow Us</h2>
+      <div class="social-icons">
+        <a href="https://instagram.com" target="_blank"><i class="fab fa-instagram"></i></a>
+        <a href="https://facebook.com" target="_blank"><i class="fab fa-facebook"></i></a>
+        <a href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a>
       </div>
     </div>
 
   </div>
 
   <!-- Bottom Line -->
-  <div class="text-center mt-10 text-sm text-gray-500 border-t border-gray-700 pt-6">
+  <div class="footer-bottom">
     © <%= new Date().getFullYear() %> Buyhatke. All rights reserved.
   </div>
 </footer>

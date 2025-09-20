@@ -4,17 +4,26 @@ const { isAuthenticated } = require('../Middleware/authMiddleware');
 const Order = require('../models/Order');
 const orderController = require('../controllers/orderController');
 
-// ------------------ User Dashboard ------------------
+// ------------------ User Dashboard ------------------//
 router.get('/dashboard', isAuthenticated, async (req, res) => {
   try {
     const orders = await Order.find({ user: req.session.user._id }).populate('items.product');
-    res.render('user-dashboard', { user: req.session.user, orders });
+
+    // Get orders with return requests
+    const returns = orders.filter(o => o.status === 'Return Requested');
+
+    res.render('user-dashboard', { 
+      user: req.session.user, 
+      orders, 
+      returns 
+    });
   } catch (err) {
     console.error(err);
     req.flash('error_msg', 'Unable to load dashboard');
     res.redirect('/');
   }
 });
+
 
 // ------------------ User Orders Page ------------------
 router.get('/orders', isAuthenticated, orderController.userOrders);

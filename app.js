@@ -48,19 +48,19 @@ app.use(
   })
 );
 
-// Flash messages
+// Flash messages and user for templates
 app.use(flash());
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
-  res.locals.user = req.session.user || null;
+  res.locals.user = req.session.user || null; // <-- ensures footer sees user
   next();
 });
 
 // ------------------ ROUTES ------------------
 app.use('/', require('./routes/auth'));        // login/register/logout
-app.use('/products', require('./routes/products'));// product list & details
+app.use('/products', require('./routes/products')); // product list & details
 app.use('/cart', require('./routes/cart'));    // shopping cart
 app.use('/user', require('./routes/user'));    // user dashboard/orders
 app.use('/admin', require('./routes/admin'));  // admin dashboard/products
@@ -71,14 +71,13 @@ app.get('/about', (req, res) => res.render('about'));
 app.get('/contact', (req, res) => res.render('contact'));
 app.get('/', async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 }); // latest first
-    res.render('index', { products, user: req.session.user || null });
+    const products = await Product.find().sort({ createdAt: -1 });
+    res.render('index', { products });
   } catch (err) {
     console.error(err);
-    res.render('index', { products: [], user: req.session.user || null });
+    res.render('index', { products: [] });
   }
 });
-
 
 // ------------------ SITEMAP ------------------
 app.get('/sitemap.xml', async (req, res) => {
