@@ -19,18 +19,18 @@
         <% if (!user) { %>
           <!-- Guest links -->
           <li><a href="/" class="hover:text-pink-500 transition-colors duration-300">Home</a></li>
-          <li><a href="/shop" class="hover:text-pink-500 transition-colors duration-300">Shop</a></li>
+          <li><a href="/products" class="hover:text-pink-500 transition-colors duration-300">Shop</a></li>
           <li><a href="/about" class="hover:text-pink-500 transition-colors duration-300">About</a></li>
           <li><a href="/contact" class="hover:text-pink-500 transition-colors duration-300">Contact</a></li>
         <% } else if (user.role === 'user') { %>
           <!-- Logged-in user links -->
-          <li><a href="/shop" class="hover:text-pink-500 transition-colors duration-300">Shop</a></li>
+          <li><a href="/products" class="hover:text-pink-500 transition-colors duration-300">Shop</a></li>
           <li><a href="/cart" class="hover:text-pink-500 transition-colors duration-300">My Cart</a></li>
           <li><a href="/orders" class="hover:text-pink-500 transition-colors duration-300">My Orders</a></li>
           <li><a href="/profile" class="hover:text-pink-500 transition-colors duration-300">Profile</a></li>
         <% } else if (user.role === 'admin') { %>
           <!-- Admin links -->
-          <li><a href="/admin/dashboard" class="hover:text-pink-500 transition-colors duration-300">Dashboard</a></li>
+          <li><a href="/admin" class="hover:text-pink-500 transition-colors duration-300">Dashboard</a></li>
           <li><a href="/admin/products" class="hover:text-pink-500 transition-colors duration-300">Manage Products</a></li>
           <li><a href="/admin/orders" class="hover:text-pink-500 transition-colors duration-300">Manage Orders</a></li>
           <li><a href="/admin/users" class="hover:text-pink-500 transition-colors duration-300">Manage Users</a></li>

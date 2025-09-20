@@ -60,7 +60,7 @@ app.use((req, res, next) => {
 
 // ------------------ ROUTES ------------------
 app.use('/', require('./routes/auth'));        // login/register/logout
-app.use('/shop', require('./routes/products'));// product list & details
+app.use('/products', require('./routes/products'));// product list & details
 app.use('/cart', require('./routes/cart'));    // shopping cart
 app.use('/user', require('./routes/user'));    // user dashboard/orders
 app.use('/admin', require('./routes/admin'));  // admin dashboard/products

@@ -3,6 +3,7 @@ const router = express.Router();
 const Product = require('../models/Product');
 
 // Product list with optional search
+// Product list with optional search
 router.get('/', async (req, res) => {
   try {
     const search = req.query.search || '';
@@ -16,7 +17,9 @@ router.get('/', async (req, res) => {
 
     res.render('product-list', {
       products,
-      search, // ✅ pass search to EJS
+      search,
+      user: req.session.user || null,   // ✅ pass user
+      active: 'products'                // ✅ highlight Shop nav
     });
   } catch (err) {
     console.error(err);
