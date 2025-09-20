@@ -44,9 +44,10 @@
             <li><a href="/cart" class="<%= active === 'cart' ? 'active' : '' %>">Cart</a></li>
 
             <!-- Hide Checkout unless cart has items -->
-            <% if (cart && cart.length > 0) { %>
+            <% if (typeof cart !== "undefined" && cart.length > 0) { %>
               <li><a href="/checkout" class="<%= active === 'checkout' ? 'active' : '' %>">Checkout</a></li>
             <% } %>
+
 
             <li><a href="/user/dashboard" class="<%= active === 'user' ? 'active' : '' %>">My Dashboard</a></li>
 
