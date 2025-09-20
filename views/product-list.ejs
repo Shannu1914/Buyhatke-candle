@@ -10,10 +10,11 @@
 <section class="shop-section container">
   <h1>Shop Candles</h1>
 
-  <form method="GET" action="/shop" class="search-form">
-    <input type="text" name="search" placeholder="Search candles..." value="<%= search || '' %>" />
+  <form method="GET" action="/products" class="search-form">
+    <input type="text" name="search" placeholder="Search candles..." value="<%= search %>" />
     <button type="submit">Search</button>
   </form>
+
 
   <% if (products.length === 0) { %>
     <p>No products found.</p>
