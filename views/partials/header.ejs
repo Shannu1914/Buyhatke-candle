@@ -42,17 +42,23 @@
             <li><a href="/register" class="<%= active === 'register' ? 'active' : '' %>">Register</a></li>
           <% } else { %>
             <li><a href="/cart" class="<%= active === 'cart' ? 'active' : '' %>">Cart</a></li>
-            <li><a href="/checkout" class="<%= active === 'checkout' ? 'active' : '' %>">Checkout</a></li>
+
+            <!-- Hide Checkout unless cart has items -->
+            <% if (cart && cart.length > 0) { %>
+              <li><a href="/checkout" class="<%= active === 'checkout' ? 'active' : '' %>">Checkout</a></li>
+            <% } %>
+
             <li><a href="/user/dashboard" class="<%= active === 'user' ? 'active' : '' %>">My Dashboard</a></li>
 
-            <% if(user.role === 'admin') { %>
+            <% if (user.role === 'admin') { %>
               <li><a href="/admin/dashboard" class="<%= active === 'admin' ? 'active' : '' %>">Admin Dashboard</a></li>
-              <li><a href="/admin/products">Manage Products</a></li>
+              <li><a href="/admin/products" class="<%= active === 'manage-products' ? 'active' : '' %>">Manage Products</a></li>
             <% } %>
 
             <li><a href="/logout">Logout (<%= user.name %>)</a></li>
           <% } %>
         </ul>
+
       </nav>
     </header>
 
