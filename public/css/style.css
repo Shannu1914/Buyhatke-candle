@@ -39,25 +39,32 @@ p, a, label, textarea, button, input {
 
 /* === Header & Navbar === */
 header {
-  background: #fff;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  padding: 15px 30px;
-  position: relative;
-  z-index: 10;
+  background: #ffe6f0; /* pale pink */
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border-bottom: 2px solid #ffb6c1; /* optional soft pink border */
 }
 
 .navbar {
+  max-width: 1200px;  /* keeps content centered */
+  margin: 0 auto;
+  padding: 15px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #222;
-  padding: 10px 20px;
-  color: #fff;
 }
 
 .logo {
   display: flex;
   align-items: center;
+}
+
+.logo a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
 }
 
 .logo img {
@@ -68,19 +75,20 @@ header {
 }
 
 .logo .company-name {
-  font-size: 24px;
-  font-weight: bold;
-  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #d63384;
 }
 
+/* Mobile menu toggle */
 .menu-toggle {
-      display: none;
-      font-size: 28px;
-      background: none;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-    }
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #333;
+}
 
 .nav-links {
       list-style: none;
@@ -90,8 +98,19 @@ header {
       padding: 0;
     }
 
+.nav-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: #d63384;
+}
+
 .nav-links li a {
-      color: #fff;
+      color: #000;
       text-decoration: none;
       font-weight: 500;
     }
@@ -100,44 +119,48 @@ header {
       border-bottom: 2px solid #fff;
     }
 
-.nav-links li a:hover {
-  background: #007bff;
-  color: white;
-}
 
-/* === Hero Section === */
+/* === HERO SECTION === */
 .hero-section {
-  background: url('/images/hero-bg.jpg') no-repeat center/cover;
-  min-height: 60vh;
-  color: white;
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 40px 20px;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  padding: 80px 20px;
 }
 
-.hero-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,0.2);
-  z-index: 0;
-}
 .hero-content {
-  position: relative;
-  z-index: 1;
-  max-width: 900px;
-  margin: auto;
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
   align-items: center;
   justify-content: space-between;
+  gap: 40px;
 }
-.hero-title { font-size: 2.5rem; font-weight: bold; margin-bottom: 15px; }
-.hero-subtitle { font-size: 1.2rem; margin-bottom: 20px; }
-.hero-left { flex: 1; min-width: 200px; }
-.hero-right img { max-width: 80%; border-radius: 10px; }
+
+.hero-left {
+  max-width: 600px;
+  animation: fadeInLeft 1s ease;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #333;
+  line-height: 1.2;
+}
+
+.hero-title span {
+  color: #ff6600;
+}
+
+.hero-subtitle {
+  margin: 15px 0 30px;
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.hero-right img {
+  width: 450px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
+  animation: fadeInRight 1s ease;
+}
 
 /* === Utilities === */
 .container { max-width: 1200px; margin: auto; padding: 0 20px; }
@@ -347,46 +370,105 @@ header {
 }
 
 
-/* Buttons */
-.btn { padding: 12px 24px; border-radius: 5px; font-weight: bold; transition: 0.3s; }
-.btn-primary { background: #007bff; color: white; }
-.btn-primary:hover { background: #0056b3; }
-
-/* === Features Section === */
-.features { padding: 60px 20px; text-align: center; background: #f9f9f9; }
-.feature-grid { display: flex; flex-wrap: wrap; gap: 30px; justify-content: space-around; }
-.feature-card { flex: 1; min-width: 280px; background: white; padding: 20px; border-radius: 12px; }
-
-.featured-products {
-  text-align: center;           /* Center section text */
-  padding: 60px 20px;
-  margin: 0 auto;
+/* === BUTTONS === */
+.btn {
+  display: inline-block;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.featured-products h2 {
-  font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 40px;
+.btn-primary {
+  background: #ff6600;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #e65c00;
+}
+
+.btn-outline {
+  border: 2px solid #ff6600;
+  color: #ff6600;
+  margin-left: 10px;
+}
+
+.btn-outline:hover {
+  background: #ff6600;
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #333;
+  color: #fff;
+}
+
+.btn-secondary:hover {
+  background: #000;
+}
+
+
+/* === FEATURED PRODUCTS === */
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin: 50px 0 30px;
+  position: relative;
+}
+
+.section-title::after {
+  content: "";
+  width: 60px;
+  height: 4px;
+  background: #ff6600;
+  display: block;
+  margin: 10px auto 0;
+  border-radius: 2px;
 }
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 columns per row */
-  gap: 30px;                             /* Space between products */
-  justify-content: center;
-  max-width: 1200px;                      /* Constrain width */
-  margin: 0 auto;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 25px;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0px 6px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0px 10px 25px rgba(0,0,0,0.15);
+}
+
+.product-img img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.product-card h3 {
+  margin: 15px 0 5px;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.price {
+  font-size: 1.1rem;
+  color: #ff6600;
+  margin-bottom: 15px;
 }
 
 /* Product Card */
-.product-card {
-  background-color: #fff;
-  border: 1px solid #e0e0e0;
-  border-radius: 12px;
-  padding: 20px;
-  text-align: center;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
 
 .product-card img {
   width: 100%;
@@ -396,11 +478,6 @@ header {
   margin-bottom: 15px;
 }
 
-.product-card h3 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  color: #333;
-}
 
 .product-card p {
   font-size: 1rem;
@@ -512,48 +589,52 @@ header {
 }
 
 
+/* === CTA SECTION === */
 .cta-section {
-  background-color: #000;          /* Black background */
-  color: #fff;                     /* White text */
-  text-align: center;              /* Center text */
-  padding: 80px 20px;              /* Top/Bottom padding */
-  margin: 0;                        /* Remove default margins */
-  display: flex;
-  justify-content: center;          /* Center horizontally */
-  align-items: center;              /* Center vertically */
+  background: url('/images/cta-bg.jpg') center/cover no-repeat;
+  padding: 80px 20px;
+  text-align: center;
+  color: #fff;
+  position: relative;
 }
 
-.cta-section .container {
-  max-width: 800px;                /* Constrain width */
-  width: 100%;
+.cta-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
 }
 
-.cta-section h2 {
+.cta-content {
+  position: relative;
+  z-index: 2;
+}
+
+.cta-content h2 {
   font-size: 2.5rem;
-  font-weight: bold;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
-.cta-section p {
+.cta-content p {
   font-size: 1.2rem;
   margin-bottom: 30px;
 }
 
-.cta-section .btn-primary {
-  background-color: #ff4081;       /* Pink button */
-  color: #fff;
-  padding: 15px 30px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+
+/* === ANIMATIONS === */
+@keyframes fadeInLeft {
+  from { opacity: 0; transform: translateX(-50px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
-.cta-section .btn-primary:hover {
-  background-color: #e73370;       /* Darker pink on hover */
+@keyframes fadeInRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
 }
 
 
+
+/* === Media ===*/
 @media (max-width: 992px) {
   .product-grid {
     grid-template-columns: repeat(2, 1fr);
