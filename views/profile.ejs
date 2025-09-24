@@ -1,0 +1,29 @@
+<%- include('partials/header') %>
+
+<section class="auth-section">
+  <div class="auth-card profile-card">
+    <h1>My Profile</h1>
+
+    <div class="profile-info">
+      <div class="profile-photo-container">
+        <img src="<%= user.profileImage || '/images/default-profile.png' %>" alt="Profile Photo" class="profile-photo" />
+        <form action="/user/profile/upload" method="POST" enctype="multipart/form-data" class="profile-upload-form">
+          <input type="file" name="profileImage" accept="image/*" required />
+          <button type="submit" class="btn btn-primary btn-upload">Change Photo</button>
+        </form>
+      </div>
+
+      <h2 class="profile-name"><%= user.name %></h2>
+      <p class="profile-role"><%= user.isAdmin ? 'Administrator' : 'User' %></p>
+
+      <div class="profile-details">
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Joined:</strong> <%= user.createdAt ? user.createdAt.toDateString() : 'N/A' %></p>
+      </div>
+
+      <a href="/user/dashboard" class="btn btn-outline">Back to Dashboard</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -20,17 +20,26 @@ exports.postLogin = async (req, res) => {
     return res.redirect('/login');
   }
 
+  // Store only essential info in session
   req.session.user = {
     _id: user._id,
     name: user.name,
     email: user.email,
-    isAdmin: user.isAdmin
+    role: user.isAdmin ? 'admin' : 'user',
+    isAdmin: user.isAdmin 
   };
 
-
   req.flash('success_msg', 'Welcome back!');
-  res.redirect('/');
+
+  // Redirect based on role
+  if (user.isAdmin) {
+    return res.redirect('/admin');
+  } else {
+    return res.redirect('/user/dashboard'); 
+  }
 };
+
+
 
 exports.getRegister = (req, res) => {
   res.render('register');

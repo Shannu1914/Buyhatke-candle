@@ -54,7 +54,8 @@ app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg');
   res.locals.error_msg = req.flash('error_msg');
   res.locals.error = req.flash('error');
-  res.locals.user = req.session.user || null; // <-- ensures footer sees user
+  res.locals.user = req.session.user || null; 
+  res.locals.active = '';
   next();
 });
 
@@ -67,15 +68,15 @@ app.use('/admin', require('./routes/admin'));  // admin dashboard/products
 app.use('/payment', require('./routes/payment')); // checkout & stripe
 
 // Static pages
-app.get('/about', (req, res) => res.render('about'));
-app.get('/contact', (req, res) => res.render('contact'));
+app.get('/about', (req, res) => res.render('about', { active: 'about', user: req.session.user }));
+app.get('/contact', (req, res) => res.render('contact', { user: req.session.user, active: 'contact' }));
 app.get('/', async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
-    res.render('index', { products });
+    res.render('index', { products, user: req.session.user, active: 'home' });
   } catch (err) {
     console.error(err);
-    res.render('index', { products: [] });
+    res.render('index', { products: [], user: req.session.user, active: 'home' });
   }
 });
 

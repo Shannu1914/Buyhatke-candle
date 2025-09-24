@@ -1,5 +1,3 @@
-// controllers/adminController.js
-
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
@@ -14,7 +12,7 @@ exports.dashboard = async (req, res) => {
       pendingOrders: await Order.countDocuments({ status: 'pending' }),
     };
 
-    res.render('admin/dashboard', { stats });
+    res.render('admin/dashboard', { stats, user: req.session.user });
   } catch (err) {
     console.error('Error loading dashboard:', err);
     req.flash('error_msg', 'Failed to load dashboard');
@@ -22,27 +20,30 @@ exports.dashboard = async (req, res) => {
   }
 };
 
-// List all users
 exports.listUsers = async (req, res) => {
   try {
-    const users = await User.find();
-    res.render('admin/users', { users });
+    const users = await User.find().lean();
+    res.render('admin/users', {
+      users,
+      user: req.session.user,   
+      active: 'manageUsers'     
+    });
   } catch (err) {
-    console.error('Error listing users:', err);
+    console.error(err);
     req.flash('error_msg', 'Failed to load users');
-    res.redirect('/admin/dashboard');
+    res.redirect('/admin');
   }
 };
 
-// List all products
+// Products Page
 exports.listProducts = async (req, res) => {
   try {
     const products = await Product.find();
-    res.render('admin/products', { products });
+    res.render('admin/products', { products, user: req.session.user,  active: 'manageProducts' });
   } catch (err) {
-    console.error('Error listing products:', err);
+    console.error(err);
     req.flash('error_msg', 'Failed to load products');
-    res.redirect('/admin/dashboard');
+    res.redirect('/admin');
   }
 };
 
@@ -83,15 +84,35 @@ exports.deleteProduct = async (req, res) => {
   }
 };
 
-// List all orders
+// Delete a user
+exports.deleteUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    // Prevent admin from deleting themselves
+    if (req.session.user._id === userId) {
+      req.flash('error_msg', 'You cannot delete yourself.');
+      return res.redirect('/admin/users');
+    }
+
+    await User.findByIdAndDelete(userId);
+    req.flash('success_msg', 'User deleted successfully!');
+    res.redirect('/admin/users');
+  } catch (err) {
+    console.error('Error deleting user:', err);
+    req.flash('error_msg', 'Error deleting user.');
+    res.redirect('/admin/users');
+  }
+};
+
+// Orders Page
 exports.listOrders = async (req, res) => {
   try {
     const orders = await Order.find().populate('user').populate('items.product');
-    res.render('admin/orders', { orders });
+    res.render('admin/orders', { orders, user: req.session.user });
   } catch (err) {
-    console.error('Error listing orders:', err);
+    console.error(err);
     req.flash('error_msg', 'Failed to load orders');
-    res.redirect('/admin/dashboard');
+    res.redirect('/admin');
   }
 };
 

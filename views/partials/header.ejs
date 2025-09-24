@@ -4,17 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Buyhatke Candles | Handcrafted Candles</title>
-  <meta name="description" content="Shop premium handcrafted candles at Buyhatke. Perfect gifts, soothing aromas, and beautiful designs.">
-  <meta name="keywords" content="candles, handmade candles, aroma candles, luxury candles, Buyhatke">
-  <meta name="author" content="Buyhatke Candles">
+  <title>Buy Hatke Candles | Handcrafted Candles</title>
+  <meta name="description" content="Shop premium handcrafted candles at Buy Hatke. Perfect gifts, soothing aromas, and beautiful designs.">
+  <meta name="keywords" content="candles, handmade candles, aroma candles, luxury candles, Buy Hatke">
+  <meta name="author" content="Buy Hatke Candles">
   <meta name="robots" content="index, follow">
 
   <!-- Open Graph for social sharing -->
-  <meta property="og:title" content="Buyhatke Candles" />
-  <meta property="og:description" content="Discover handcrafted candles with soothing aromas at Buyhatke." />
+  <meta property="og:title" content="Buy Hatke Candles" />
+  <meta property="og:description" content="Discover handcrafted candles with soothing aromas at Buy Hatke." />
   <meta property="og:image" content="/images/logo.png" />
-  <meta property="og:url" content="https://buyhatke-candles.onrender.com" />
+  <meta property="og:url" content="https://Buy Hatke-candles.onrender.com" />
   <meta name="twitter:card" content="summary_large_image" />
 
   <link rel="icon" href="/images/logo.png" />
@@ -24,57 +24,58 @@
 <body>
   <div class="page-wrapper">
     <header>
-      <nav class="navbar">
-        <div class="logo">
-          <a href="/"><img src="/images/logo.png" alt="Buyhatke Logo" /><span class="company-name">Buyhatke</span></a>
-        </div>
+  <nav class="navbar">
+    <!-- Left: Logo -->
+    <div class="logo">
+      <a href="/">
+        <img src="/images/logo.png" alt="Buy Hatke Logo" />
+        <span class="company-name">Buy Hatke</span>
+      </a>
+    </div>
 
-        <button class="menu-toggle" id="menuToggle">&#9776;</button>
+    <!-- Center: Navigation -->
+    <ul class="nav-links" id="navLinks">
+      <li><a href="/" class="<%= typeof active !== 'undefined' && active === 'home' ? 'active' : '' %>">Home</a></li>
+      <li><a href="/products" class="<%= typeof active !== 'undefined' && active === 'products' ? 'active' : '' %>">Shop</a></li>
 
-        <ul class="nav-links" id="nav-links">
-          <!-- Always show Home & Products -->
-          <li><a href="/" class="<%= active === 'home' ? 'active' : '' %>">Home</a></li>
-          <li><a href="/products" class="<%= active === 'products' ? 'active' : '' %>">Shop</a></li>
+      <% if (!user || (user && !user.isAdmin)) { %>
+        <li><a href="/about" class="<%= active === 'about' ? 'active' : '' %>">About</a></li>
+        <li><a href="/contact" class="<%= active === 'contact' ? 'active' : '' %>">Contact</a></li>
+        <li><a href="/cart" class="<%= active === 'cart' ? 'active' : '' %>">Cart</a></li>
+        <% if (typeof cart !== "undefined" && cart.length > 0) { %>
+          <li><a href="/checkout" class="<%= active === 'checkout' ? 'active' : '' %>">Checkout</a></li>
+        <% } %>
+      <% } %>
+    </ul>
 
-          <% if (!user || user.role !== 'admin') { %>
-            <!-- Show only for normal users -->
-            <li><a href="/about" class="<%= active === 'about' ? 'active' : '' %>">About</a></li>
-            <li><a href="/contact" class="<%= active === 'contact' ? 'active' : '' %>">Contact</a></li>
+    <!-- Right: Auth / Dashboard -->
+    <div class="auth-links">
+      <% if (user) { %>
+        <% if (user.isAdmin) { %>
+          <a href="/admin" class="<%= active === 'admin' ? 'active' : '' %>">Admin Dashboard</a>
+          <a href="/admin/products" class="<%= active === 'manageProducts' ? 'active' : '' %>">Manage Products</a>
+        <% } else { %>
+          <a href="/user/dashboard" class="<%= active === 'user' ? 'active' : '' %>">My Account</a>
+        <% } %>
+        <a href="/logout" class="btn btn-primary">Logout</a>
+      <% } else { %>
+        <a href="/login" class="btn btn-primary">Login</a>
+        <a href="/register" class="btn btn-primary">Register</a>
+      <% } %>
+    </div>
 
-            <% if (typeof cart !== "undefined" && cart.length > 0) { %>
-              <li><a href="/checkout" class="<%= active === 'checkout' ? 'active' : '' %>">Checkout</a></li>
-            <% } %>
-            <li><a href="/cart" class="<%= active === 'cart' ? 'active' : '' %>">Cart</a></li>
-          <% } %>
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" id="menuToggle">&#9776;</button>
+  </nav>
+</header>
 
-          <% if (user) { %>
-            <% if (user.role === 'admin') { %>
-              <!-- Admin-only links -->
-              <li><a href="/admin/dashboard" class="<%= active === 'admin' ? 'active' : '' %>">Admin Dashboard</a></li>
-              <li><a href="/admin/products" class="<%= active === 'manageProducts' ? 'active' : '' %>">Manage Products</a></li>
-            <% } else { %>
-              <!-- Normal user dashboard -->
-              <li><a href="/user/dashboard" class="<%= active === 'user' ? 'active' : '' %>">My Account</a></li>
-            <% } %>
-            <li><a href="/logout">Logout</a></li>
-          <% } else { %>
-            <!-- Guest -->
-            <li><a href="/login" class="<%= active === 'login' ? 'active' : '' %>">Login</a></li>
-            <li><a href="/register" class="<%= active === 'register' ? 'active' : '' %>">Register</a></li>
-          <% } %>
-        </ul>
-
-
-      </nav>
-    </header>
-
-    <script>
-      const menuToggle = document.getElementById('menuToggle');
-      const navLinks = document.getElementById('navLinks');
-      menuToggle.addEventListener('click', () => {
-        navLinks.classList.toggle('show');
-      });
-    </script>
+<script>
+  const menuToggle = document.getElementById('menuToggle');
+  const navLinks = document.getElementById('navLinks');
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('show');
+  });
+</script>
 
     <main>
       <% if(success_msg && success_msg.length > 0) { %>

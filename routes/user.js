@@ -1,19 +1,56 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
 const router = express.Router();
 const { isAuthenticated } = require('../Middleware/authMiddleware');
 const Order = require('../models/Order');
 const orderController = require('../controllers/orderController');
+const userController = require('../controllers/userController');
+
+
+// Configure storage for profile images
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, '..', 'public', 'uploads', 'profiles'));
+  },
+  filename: (req, file, cb) => {
+    const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    cb(null, unique + ext);
+  }
+});
+const upload = multer({ storage });
+
+// Upload profile image
+router.post('/profile/upload', isAuthenticated, upload.single('profileImage'), async (req, res) => {
+  try {
+    const user = await User.findById(req.session.user._id);
+    if (!user) throw new Error('User not found');
+
+    user.profileImage = `/uploads/profiles/${req.file.filename}`;
+    await user.save();
+
+    // Update session
+    req.session.user.profileImage = user.profileImage;
+
+    req.flash('success_msg', 'Profile image updated successfully!');
+    res.redirect('/user/profile');
+  } catch (err) {
+    console.error(err);
+    req.flash('error_msg', 'Failed to upload profile image');
+    res.redirect('/user/profile');
+  }
+});
 
 // ------------------ User Dashboard ------------------//
 router.get('/dashboard', isAuthenticated, async (req, res) => {
   try {
     const orders = await Order.find({ user: req.session.user._id }).populate('items.product');
-
-    // Get orders with return requests
     const returns = orders.filter(o => o.status === 'Return Requested');
 
     res.render('user-dashboard', { 
       user: req.session.user, 
+      active: 'user',
       orders, 
       returns 
     });
@@ -23,6 +60,10 @@ router.get('/dashboard', isAuthenticated, async (req, res) => {
     res.redirect('/');
   }
 });
+
+
+// Profile page
+router.get('/profile', isAuthenticated, userController.profile);
 
 
 // ------------------ User Orders Page ------------------

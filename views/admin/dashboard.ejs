@@ -1,0 +1,50 @@
+<%- include('../partials/header', { title: 'Admin Dashboard', active: 'admin' }) %>
+
+<section class="admin-dashboard container" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); min-height: 100vh; padding: 50px 0;">
+  <h1 class="dashboard-title">🛠 Admin Dashboard</h1>
+
+  <!-- Quick Stats -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Total Users</h3>
+      <p><%= stats.users %></p>
+    </div>
+    <div class="stat-card">
+      <h3>Total Products</h3>
+      <p><%= stats.products %></p>
+    </div>
+    <div class="stat-card">
+      <h3>Total Orders</h3>
+      <p><%= stats.orders %></p>
+    </div>
+    <div class="stat-card pending">
+      <h3>Pending Orders</h3>
+      <p><%= stats.pendingOrders %></p>
+    </div>
+  </div>
+
+  <!-- Management Sections -->
+  <div class="dashboard-grid">
+
+    <!-- Users Management -->
+    <div class="card">
+      <h2>👤 Manage Users</h2>
+      <a href="/admin/users" class="btn btn-primary btn-small">View All Users</a>
+    </div>
+
+    <!-- Products Management -->
+    <div class="card">
+      <h2>🕯 Manage Products</h2>
+      <a href="/admin/products" class="btn btn-primary btn-small">Go to Products</a>
+    </div>
+
+    <!-- Orders Management -->
+    <div class="card">
+      <h2>📦 Manage Orders</h2>
+      <a href="/admin/orders" class="btn btn-primary btn-small">View All Orders</a>
+    </div>
+
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
