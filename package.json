@@ -1,7 +1,7 @@
 {
-  "name": "yr-publication",
+  "name": "buy-hatke",
   "version": "1.0.0",
-  "description": "YR Publication website",
+  "description": "buy-hatke website",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
@@ -33,6 +33,6 @@
   "devDependencies": {
     "nodemon": "^3.1.10"
   },
-  "author": "YR Publication",
+  "author": "Buy Hatke",
   "license": "ISC"
 }
