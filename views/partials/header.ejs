@@ -31,7 +31,7 @@
 
         <button class="menu-toggle" id="menuToggle">&#9776;</button>
 
-        <ul class="nav-links">
+        <ul class="nav-links" id="nav-links">
           <!-- Always show Home & Products -->
           <li><a href="/" class="<%= active === 'home' ? 'active' : '' %>">Home</a></li>
           <li><a href="/products" class="<%= active === 'products' ? 'active' : '' %>">Shop</a></li>
@@ -67,6 +67,14 @@
 
       </nav>
     </header>
+
+    <script>
+      const menuToggle = document.getElementById('menuToggle');
+      const navLinks = document.getElementById('navLinks');
+      menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('show');
+      });
+    </script>
 
     <main>
       <% if(success_msg && success_msg.length > 0) { %>
