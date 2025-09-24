@@ -868,6 +868,15 @@ header {
 =============================== */
 @media (max-width: 768px) {
 
+  .menu-toggle {
+    display: block;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    margin-left: auto;
+  }
+
   /* Navbar */
   .navbar {
     flex-direction: column;
@@ -880,10 +889,18 @@ header {
   }
 
   .nav-links {
+    display: none; /* Hide menu by default */
     flex-direction: column;
     width: 100%;
-    gap: 10px;
     margin-top: 10px;
+    gap: 10px;
+    background: #ffe6f0; /* Optional: mobile menu bg */
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .nav-links.show {
+    display: flex; /* Show menu when toggled */
   }
 
   .auth-links {
