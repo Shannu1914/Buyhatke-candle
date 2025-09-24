@@ -1,0 +1,17 @@
+node:internal/buffer:961
+    super(bufferOrLength, byteOffset, length);
+    ^
+
+RangeError: Array buffer allocation failed
+    at new ArrayBuffer (<anonymous>)
+    at new Uint8Array (<anonymous>)
+    at new FastBuffer (node:internal/buffer:961:5)
+    at Function.alloc (node:buffer:400:10)
+    at Object.<anonymous> (C:\Users\STUDENT\OneDrive\Desktop\Buyhatke\node_modules\bson\lib\bson.js:89:30)
+    at Module._compile (node:internal/modules/cjs/loader:1554:14)
+    at Object..js (node:internal/modules/cjs/loader:1706:10)
+    at Module.load (node:internal/modules/cjs/loader:1289:32)
+    at Function._load (node:internal/modules/cjs/loader:1108:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+
+Node.js v22.14.0
