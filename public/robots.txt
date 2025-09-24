@@ -9,4 +9,4 @@ Allow: /
 Allow: /articles
 Allow: /about
 
-Sitemap: https://shanmukh-trlv.onrender.com/sitemap.xml
+Sitemap: https://buyhatke-candles.onrender.com/sitemap.xml
