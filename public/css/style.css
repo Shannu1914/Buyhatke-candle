@@ -405,6 +405,7 @@ header {
 }
 
 .btn-primary {
+  border: 2px solid #000;
   background: #ff6600;
   color: #fff;
 }
@@ -414,7 +415,7 @@ header {
 }
 
 .btn-outline {
-  border: 2px solid #ff6600;
+  border: 2px solid #000;
   background: #ff6600;
   color: #fff;
   margin-left: 10px;
@@ -422,10 +423,10 @@ header {
 
 .btn-outline:hover {
   background: #ff6600;
-  color: #fff;
 }
 
 .btn-secondary {
+  border: 2px solid #000;
   background: #333;
   color: #fff;
 }
@@ -641,7 +642,7 @@ header {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(250, 211, 244, 0.5);
+  background: #ffe6f0; 
 }
 
 .cta-content {
@@ -656,7 +657,7 @@ header {
 }
 
 .cta-content p {
-  color: #333;
+  color: #f18585;
   font-size: 1.2rem;
   margin-bottom: 30px;
 }
