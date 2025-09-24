@@ -77,9 +77,19 @@
 <script>
   const menuToggle = document.getElementById('menuToggle');
   const navLinks = document.getElementById('navLinks');
+  
+  //TOGGLE MOBILE MENU
   menuToggle.addEventListener('click', () => {
     navLinks.classList.toggle('show');
   });
+
+  //CLOSE MENU WHEN CLICKING ANY LINK
+  document.querySelectorAll('#navLinks a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('show'); // closes menu after clicking
+    });
+  });
+
 </script>
 
     <main>
