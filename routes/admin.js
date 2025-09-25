@@ -62,7 +62,20 @@ router.get('/', isAuthenticated, isAdmin, async (req, res) => {
 
 // Product routes
 router.get('/products', isAuthenticated, isAdmin, adminController.listProducts); // list products
-router.post('/products/add', isAuthenticated, isAdmin, upload.single('image'), adminController.addProduct);
+router.get('/products/add', isAuthenticated, isAdmin, (req, res) => {
+  res.render('admin/add-product', { 
+    user: req.session.user,
+    active: 'manageProducts'
+  });
+});
+
+router.post(
+  '/products/add',
+  isAuthenticated,
+  isAdmin,
+  upload.single('image'),
+  adminController.addProduct
+);
 router.post('/products/delete/:id', isAuthenticated, isAdmin, adminController.deleteProduct);
 
 // User management routes

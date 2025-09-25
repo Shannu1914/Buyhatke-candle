@@ -1,0 +1,47 @@
+<%- include('../partials/header') %>
+
+<section class="admin-section">
+  <div class="admin-card">
+    <h2 class="page-title">➕ Add New Product</h2>
+
+    <form action="/admin/products/add" method="POST" enctype="multipart/form-data" class="product-form">
+      <!-- Product Name -->
+      <div class="form-group">
+        <label for="name">Product Name</label>
+        <input type="text" name="name" id="name" required>
+      </div>
+
+      <!-- Description -->
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea name="description" id="description" rows="4" required></textarea>
+      </div>
+
+      <!-- Price -->
+      <div class="form-group">
+        <label for="price">Price (₹)</label>
+        <input type="number" name="price" id="price" step="0.01" required>
+      </div>
+
+      <!-- Stock -->
+      <div class="form-group">
+        <label for="stock">Stock</label>
+        <input type="number" name="stock" id="stock" required>
+      </div>
+
+      <!-- Image Upload -->
+      <div class="form-group">
+        <label for="image">Upload Product Image</label>
+        <input type="file" name="image" id="image" accept="image/*">
+      </div>
+
+      <!-- Buttons -->
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">✅ Add Product</button>
+        <a href="/admin/products" class="btn btn-secondary">⬅ Back</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
