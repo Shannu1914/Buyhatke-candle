@@ -296,7 +296,14 @@ header {
   color: #333;
   text-decoration: none;
 }
+.social-icons a i {
+  font-size: 20px;  /* keeps current size for mobile */
+  transition: transform 0.3s ease;
+}
 .social-icons a:hover { color: #e63946; }
+.social-icons a:hover i {
+  transform: scale(1.2); /* nice hover effect */
+}
 .footer-bottom {
   text-align: center;
   margin-top: 30px;
@@ -862,6 +869,12 @@ header {
   .footer-container { grid-template-columns: 1fr; text-align: center; }
   .brand, .social-icons { justify-content: center; }
 }
+@media (min-width: 769px) {
+  .social-icons a i {
+    font-size: 28px; 
+  }
+}
+
 
 /* ============================
    MOBILE RESPONSIVE (≤768px)
