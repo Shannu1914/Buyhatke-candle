@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 const flash = require('connect-flash');
 const fileUpload = require('express-fileupload');
 const { SitemapStream, streamToPromise } = require('sitemap');
+const webhookRoutes = require("./routes/webhook");
 
 const Product = require('./models/Product');
 
@@ -66,6 +67,8 @@ app.use('/cart', require('./routes/cart'));    // shopping cart
 app.use('/user', require('./routes/user'));    // user dashboard/orders
 app.use('/admin', require('./routes/admin'));  // admin dashboard/products
 app.use('/payment', require('./routes/payment')); // checkout & stripe
+app.use("/webhook", webhookRoutes);
+
 
 // Static pages
 app.get('/about', (req, res) => res.render('about', { active: 'about', user: req.session.user }));
