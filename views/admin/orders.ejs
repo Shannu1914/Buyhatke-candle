@@ -23,8 +23,21 @@
                 <td><%= index + 1 %></td>
                 <td><%= order._id %></td>
                 <td><%= order.user.name %></td>
-                <td>₹<%= order.total %></td>
-                <td><%= order.status %></td>
+                <td>₹<%= order.totalAmount %></td>
+                <td>
+                  <span 
+                    style="padding:4px 10px; border-radius:12px; font-size:0.8rem;
+                    <% if(order.status === 'Pending') { %> background:#ff9800; color:#fff; <% } %>
+                    <% if(order.status === 'Processing') { %> background:#9c27b0; color:#fff; <% } %>
+                    <% if(order.status === 'Shipped') { %> background:#2196f3; color:#fff; <% } %>
+                    <% if(order.status === 'Delivered') { %> background:#4caf50; color:#fff; <% } %>
+                    <% if(order.status === 'Cancelled') { %> background:#f44336; color:#fff; <% } %>">
+                    <%= order.status %>
+                  </span>
+                  <% if (order.trackingUrl) { %>
+                    <br><a href="<%= order.trackingUrl %>" target="_blank" class="btn btn-small btn-primary">Track</a>
+                  <% } %>
+                </td>
                 <td>
                   <form action="/admin/orders/<%= order._id %>/update" method="POST">
                     <select name="status">

@@ -6,6 +6,9 @@ const { authenticate } = require("../services/shiprocket");
 const mailService = require('../services/mailService');
 const User = require('../models/User');
 const axios = require("axios");
+const dotenv = require('dotenv');
+dotenv.config(); // load .env
+
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -211,16 +214,16 @@ exports.updateOrderStatus = async (req, res) => {
     // ✅ Send emails based on status
     const user = order.user;
     if (order.status === "Shipped") {
-      await mailService.sendOrderShipped(user, order);
+      await mailService.sendOrderShipped(order.user, order);
     }
     if (order.status === "Delivered") {
-      await mailService.sendOrderDelivered(user, order);
+      await mailService.sendOrderDelivered(order.user, order);
     }
     if (order.status === "Cancelled") {
       await mailService.sendMail(
-        user.email,
+       order.user.email,
         "Your Order has been Cancelled",
-        `<h2>Hi ${user.name},</h2><p>Your order <b>${order._id}</b> has been cancelled.</p>`
+        `<h2>Hi ${order.user.name},</h2><p>Your order <b>${order._id}</b> has been cancelled.</p>`
       );
     }
 

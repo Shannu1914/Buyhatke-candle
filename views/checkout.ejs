@@ -1,14 +1,41 @@
 <%- include('partials/header', { title: 'Checkout' }) %>
 
-<section class="checkout container">
+<section class="checkout container" style="padding:40px 20px;">
   <h2>Checkout</h2>
 
-  <div id="cart-summary">
+  <!-- Cart Summary -->
+  <div id="cart-summary" style="margin-bottom:20px;">
     <% cart.forEach(item => { %>
       <p><%= item.name %> x <%= item.qty %> = ₹<%= item.price * item.qty %></p>
     <% }) %>
     <h3>Total: ₹<%= totalAmount %></h3>
   </div>
+
+  <!-- Address Form -->
+  <form id="checkoutForm" style="background:#fff; padding:20px; border-radius:10px; box-shadow:0 4px 10px rgba(0,0,0,0.1); margin-bottom:20px;">
+    <h3>Shipping Details</h3>
+
+    <label>Name</label>
+    <input type="text" name="name" required class="form-control"/>
+
+    <label>Email</label>
+    <input type="email" name="email" required class="form-control"/>
+
+    <label>Phone</label>
+    <input type="text" name="phone" required class="form-control"/>
+
+    <label>Address</label>
+    <input type="text" name="address" required class="form-control"/>
+
+    <label>City</label>
+    <input type="text" name="city" required class="form-control"/>
+
+    <label>State</label>
+    <input type="text" name="state" required class="form-control"/>
+
+    <label>Pincode</label>
+    <input type="text" name="pincode" required class="form-control"/>
+  </form>
 
   <button id="payBtn" class="btn btn-primary">Pay Now</button>
 </section>
@@ -17,11 +44,19 @@
 <script>
   document.getElementById('payBtn').onclick = async () => {
     try {
-      // Create Razorpay order from server
-      const res = await fetch('/payment/create-order', { method: 'POST' });
+      // Grab address form data
+      const form = document.getElementById('checkoutForm');
+      const formData = Object.fromEntries(new FormData(form).entries());
+
+      // 1. Create Razorpay order from server (send address too!)
+      const res = await fetch('/payment/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
       const order = await res.json();
 
-      // Razorpay checkout options
+      // 2. Razorpay checkout options
       const options = {
         key: "<%= razorpayKey %>",
         amount: order.amount,
@@ -29,11 +64,11 @@
         name: "Buyhatke Candles",
         order_id: order.id,
         handler: async function (response) {
-          // Verify payment on server
+          // 3. Verify payment on server with order + address
           const verify = await fetch('/payment/verify', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(response)
+            body: JSON.stringify({ ...response, address: formData })
           });
 
           const resultHTML = await verify.text();
@@ -41,14 +76,16 @@
           document.write(resultHTML);
           document.close();
         },
-        theme: {
-          color: "#f973b0" // optional: matches your pink theme
-        }
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone
+        },
+        theme: { color: "#f973b0" }
       };
 
       const rzp = new Razorpay(options);
       rzp.open();
-
     } catch (err) {
       console.error(err);
       alert('Failed to initiate payment. Please try again.');

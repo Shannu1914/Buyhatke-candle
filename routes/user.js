@@ -1,11 +1,13 @@
 const express = require('express');
 const multer = require('multer');
 const path = require('path');
+const User = require('../models/User');
 const router = express.Router();
 const { isAuthenticated } = require('../Middleware/authMiddleware');
 const Order = require('../models/Order');
 const orderController = require('../controllers/orderController');
 const userController = require('../controllers/userController');
+const fs = require('fs');
 
 
 // Configure storage for profile images
@@ -22,25 +24,31 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Upload profile image
+// Upload profile image using multer
 router.post('/profile/upload', isAuthenticated, upload.single('profileImage'), async (req, res) => {
   try {
-    const user = await User.findById(req.session.user._id);
-    if (!user) throw new Error('User not found');
+    if (!req.file) {
+      req.flash('error_msg', 'No file uploaded');
+      return res.redirect('/user/dashboard');
+    }
 
+    const user = await User.findById(req.session.user._id);
     user.profileImage = `/uploads/profiles/${req.file.filename}`;
     await user.save();
 
     // Update session
     req.session.user.profileImage = user.profileImage;
 
-    req.flash('success_msg', 'Profile image updated successfully!');
-    res.redirect('/user/profile');
+    req.flash('success_msg', 'Profile picture updated successfully');
+    res.redirect('/user/dashboard');
+
   } catch (err) {
     console.error(err);
-    req.flash('error_msg', 'Failed to upload profile image');
-    res.redirect('/user/profile');
+    req.flash('error_msg', 'Failed to upload profile picture');
+    res.redirect('/user/dashboard');
   }
 });
+
 
 // ------------------ User Dashboard ------------------//
 router.get('/dashboard', isAuthenticated, async (req, res) => {

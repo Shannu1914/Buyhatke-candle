@@ -14,39 +14,67 @@
   <!-- Orders Tab -->
   <div id="orders" class="tab-content">
     <h2 style="margin-bottom: 20px;">Previous & Ongoing Orders</h2>
-    <% if (!orders || orders.length === 0) { %>
-      <p>No orders yet.</p>
-    <% } else { %>
-      <div class="table-responsive">
-        <table class="dashboard-table" style="width:100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-          <thead style="background: #ff6600; color: #fff;">
-            <tr>
-              <th style="padding:12px;">Order ID</th>
-              <th style="padding:12px;">Date</th>
-              <th style="padding:12px;">Status</th>
-              <th style="padding:12px;">Total</th>
-              <th style="padding:12px;">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% orders.forEach(order => { %>
-              <tr style="border-bottom: 1px solid #eee;">
-                <td style="padding:10px;"><%= order._id %></td>
-                <td style="padding:10px;"><%= order.createdAt?.toDateString() || 'N/A' %></td>
-                <td style="padding:10px;"><%= order.status %></td>
-                <td style="padding:10px;">₹<%= order.total %></td>
-                <td style="padding:10px;">
-                  <% if(order.status === 'Delivered') { %>
-                    <a href="/user/orders/<%= order._id %>/return" class="btn btn-secondary" style="padding:6px 12px; font-size:0.9rem;">Return / Refund</a>
-                  <% } else { %>
-                    <span>-</span>
-                  <% } %>
-                </td>
-              </tr>
+
+    <% if (!orders || orders.length === 0) { %> 
+    <p>No orders yet.</p>
+    <% } else { %>  
+    <div class="order-cards" style="display:flex; flex-direction:column; gap:20px;">
+      <% orders.forEach(order => { %>
+        <div class="order-card" style="background:#fff; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.1); padding:20px;">
+          
+          <!-- Order Header -->
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+            <div>
+              <p style="font-size:0.9rem; color:#666;">Order ID: <%= order._id %></p>
+              <p style="font-size:0.9rem; color:#666;">Placed on: <%= order.createdAt?.toDateString() || 'N/A' %></p>
+            </div>
+            <div>
+              <span 
+                style="padding:6px 12px; border-radius:20px; font-size:0.85rem; 
+                <% if(order.status === 'Pending') { %> background:#ff9800; color:#fff; <% } %>
+                <% if(order.status === 'Shipped') { %> background:#2196f3; color:#fff; <% } %>
+                <% if(order.status === 'Delivered') { %> background:#4caf50; color:#fff; <% } %>
+                <% if(order.status === 'Cancelled') { %> background:#f44336; color:#fff; <% } %>">
+                <%= order.status %>
+              </span>
+            </div>
+          </div>
+
+          <hr style="margin:15px 0; border:none; border-top:1px solid #eee;">
+
+          <!-- Products Section -->
+          <div style="display:flex; flex-wrap:wrap; gap:15px; align-items:center;">
+            <% order.items.forEach(item => { %>
+              <div style="display:flex; gap:10px; align-items:center; background:#fafafa; border-radius:8px; padding:10px; flex:1; min-width:250px;">
+                <img src="<%= item.product.imageUrl || '/images/default-product.png' %>" alt="<%= item.product.name %>" style="width:80px; height:80px; object-fit:cover; border-radius:8px; border:1px solid #ddd;" />
+                <div>
+                  <p style="font-weight:600; margin-bottom:5px;"><%= item.product.name %></p>
+                  <p style="font-size:0.9rem; color:#555;">Qty: <%= item.quantity %></p>
+                  <p style="font-size:0.9rem; color:#555;">₹<%= item.price %></p>
+                </div>
+              </div>
             <% }) %>
-          </tbody>
-        </table>
-      </div>
+          </div>
+
+          <hr style="margin:15px 0; border:none; border-top:1px solid #eee;">
+
+          <!-- Order Footer -->
+          <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+            <p style="font-size:1rem; font-weight:600;">Total: ₹<%= order.totalAmount %></p>
+            <div>
+              <% if (order.trackingUrl) { %>
+                <a href="<%= order.trackingUrl %>" target="_blank" class="btn btn-primary" style="padding:8px 14px; font-size:0.9rem;">Track Order</a>
+              <% } else if(order.status === 'Delivered') { %>
+                <a href="/user/orders/<%= order._id %>/return" class="btn btn-secondary" style="padding:8px 14px; font-size:0.9rem;">Return / Refund</a>
+              <% } else { %>
+                <span style="color:#999; font-size:0.85rem;">No actions available</span>
+              <% } %>
+            </div>
+          </div>
+
+        </div>
+      <% }) %>
+    </div>
     <% } %>
   </div>
 

@@ -731,13 +731,17 @@ header {
 
 .admin-table th, .admin-table td {
   padding: 12px 15px;
-  text-align: left;
+  text-align: center;
   border-bottom: 1px solid #ccc;
 }
 
 .admin-table th {
   background: #ffe6f0;
   font-weight: 600;
+}
+
+.admin-table tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
 .admin-table tr:hover {
