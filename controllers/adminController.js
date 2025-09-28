@@ -51,7 +51,7 @@ exports.listProducts = async (req, res) => {
 exports.addProduct = async (req, res) => {
   try {
     const { name, description, price, stock } = req.body;
-    const image = req.file ? `/uploads/products/${req.file.filename}` : null;
+    const image = req.file ? req.file.filename : null;
 
     const product = new Product({
       name,

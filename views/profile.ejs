@@ -6,7 +6,7 @@
 
     <div class="profile-info">
       <div class="profile-photo-container">
-        <img src="<%= user.profileImage || '/images/default-profile.png' %>" alt="Profile Photo" class="profile-photo" />
+        <img src="<%= user.profileImage ? user.profileImage : '/uploads/profiles/default-profile.png' %>"  alt="Profile Photo" class="profile-photo" />
         <form action="/user/profile/upload" method="POST" enctype="multipart/form-data" class="profile-upload-form">
           <input type="file" name="profileImage" accept="image/*" required />
           <button type="submit" class="btn btn-primary btn-upload">Change Photo</button>

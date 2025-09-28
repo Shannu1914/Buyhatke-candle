@@ -29,23 +29,28 @@ router.post('/profile/upload', isAuthenticated, upload.single('profileImage'), a
   try {
     if (!req.file) {
       req.flash('error_msg', 'No file uploaded');
-      return res.redirect('/user/dashboard');
+      return res.redirect('/user/profile');
     }
 
     const user = await User.findById(req.session.user._id);
+    if (!user) {
+      req.flash('error_msg', 'User not found');
+      return res.redirect('/login');
+    }
+
+    // Save path in DB
     user.profileImage = `/uploads/profiles/${req.file.filename}`;
     await user.save();
 
-    // Update session
+    // Update session user
     req.session.user.profileImage = user.profileImage;
 
     req.flash('success_msg', 'Profile picture updated successfully');
-    res.redirect('/user/dashboard');
-
+    res.redirect('/user/profile');
   } catch (err) {
-    console.error(err);
+    console.error('Profile upload error:', err);
     req.flash('error_msg', 'Failed to upload profile picture');
-    res.redirect('/user/dashboard');
+    res.redirect('/user/profile');
   }
 });
 
@@ -71,7 +76,12 @@ router.get('/dashboard', isAuthenticated, async (req, res) => {
 
 
 // Profile page
-router.get('/profile', isAuthenticated, userController.profile);
+router.get('/profile', (req, res) => {
+  if (!req.session.user) {
+    return res.redirect('/login'); // protect profile
+  }
+  res.render('profile', { user: req.session.user });
+});
 
 
 // ------------------ User Orders Page ------------------

@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true },
   password: String,
   isAdmin: { type: Boolean, default: false },
-  profileImage: { type: String, default: '/images/default-profile.png' } 
+  profileImage: { type: String, default: '/uploads/profiles/default-profile.png' }
 }, { timestamps: true }); // <<< timestamps added
 
 // Hash password before saving
