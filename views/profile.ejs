@@ -11,6 +11,12 @@
           <input type="file" name="profileImage" accept="image/*" id="profileImageInput" hidden />
           <button type="button" class="btn btn-upload-overlay" onclick="document.getElementById('profileImageInput').click();">📷 Change</button>
         </form>
+        <!-- Delete Profile Image -->
+        <% if (user.profileImage && user.profileImage !== '/uploads/profiles/default-profile.png') { %>
+          <form action="/user/profile/delete-image" method="POST">
+            <button type="submit" class="btn btn-danger">🗑 Delete Profile Picture</button>
+          </form>
+        <% } %>
       </div>
 
       <h2 class="profile-name"><%= user.name %></h2>
@@ -22,11 +28,6 @@
       </div>
 
       <div class="profile-actions" style="margin-top: 20px; display:flex; gap:10px;">
-        <!-- Delete Profile Image -->
-        <form action="/user/profile/delete-image" method="POST">
-          <button type="submit" class="btn btn-danger">🗑 Delete Profile Picture</button>
-        </form>
-
         <!-- Delete Account -->
         <form action="/user/delete-account" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
           <button type="submit" class="btn btn-danger">❌ Delete Account</button>
@@ -43,7 +44,7 @@
   <% if (locals.error_msg) { %>
     <div class="alert alert-danger"><%= error_msg %></div>
   <% } %>
-  
+
 </section>
 
 <script>
