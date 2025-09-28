@@ -2,20 +2,38 @@
 
 <section class="product-view container">
   <div class="product-detail">
-    <img src="/uploads/products/<%= product.image %>" alt="<%= product.name %>" />
-    <div class="product-info">
-      <h1><%= product.name %></h1>
-      <p><strong>Price:</strong> ₹<%= product.price %></p>
-      <p><%= product.description %></p>
 
-      <form method="POST" action="/cart/add/<%= product._id %>">
-        <label for="quantity">Quantity:</label>
-        <input type="number" name="quantity" id="quantity" value="1" min="1" required>
-        <button type="submit" class="btn btn-primary">Add to Cart</button>
-      </form>
+    <!-- Product Image -->
+    <div class="product-image">
+      <% if (product.image) { %>
+        <img src="/uploads/products/<%= product.image %>" alt="<%= product.name %>">
+      <% } else { %>
+        <img src="/images/default-product.png" alt="No Image">
+      <% } %>
     </div>
+
+    <!-- Product Info -->
+    <div class="product-info">
+      <h1 class="product-title"><%= product.name %></h1>
+      <p class="product-price">₹<%= product.price %></p>
+      <p class="product-description"><%= product.description %></p>
+
+      <form method="POST" action="/cart/add/<%= product._id %>" class="add-to-cart-form">
+        <div class="quantity-group">
+          <label for="quantity">Quantity:</label>
+          <input type="number" name="quantity" id="quantity" value="1" min="1">
+        </div>
+
+        <div class="action-buttons">
+          <button type="submit" class="btn btn-primary">🛒 Add to Cart</button>
+          <a href="/payment/checkout/<%= product._id %>" class="btn btn-buy">⚡ Buy Now</a>
+        </div>
+      </form>
+
+      <a href="/products" class="btn btn-secondary back-btn">⬅ Back to Shop</a>
+    </div>
+
   </div>
-  <a href="/shop" class="btn">⬅ Back to Shop</a>
 </section>
 
 <%- include('partials/footer') %>

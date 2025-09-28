@@ -5,7 +5,6 @@ const MongoStore = require('connect-mongo');
 const path = require('path');
 const dotenv = require('dotenv');
 const flash = require('connect-flash');
-const fileUpload = require('express-fileupload');
 const { SitemapStream, streamToPromise } = require('sitemap');
 const webhookRoutes = require("./routes/webhook");
 
@@ -26,7 +25,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 // ------------------ MIDDLEWARE ------------------
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(fileUpload());
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));

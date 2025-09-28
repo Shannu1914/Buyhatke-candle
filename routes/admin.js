@@ -4,6 +4,7 @@ const adminController = require('../controllers/adminController');
 const { isAuthenticated, isAdmin } = require('../Middleware/authMiddleware');
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 const User = require('../models/User');
 const Product = require('../models/Product');
@@ -20,7 +21,7 @@ const storage = multer.diskStorage({
     cb(null, unique + ext);
   },
 });
-const upload = multer({ storage });
+const upload = multer({ storage: storage });
 
 // Debug session route
 router.get('/check-session', (req, res) => {
@@ -62,12 +63,18 @@ router.get('/', isAuthenticated, isAdmin, async (req, res) => {
 
 // Product routes
 router.get('/products', isAuthenticated, isAdmin, adminController.listProducts); // list products
-router.get('/products/add', isAuthenticated, isAdmin, (req, res) => {
-  res.render('admin/add-product', { 
-    user: req.session.user,
-    active: 'manageProducts'
-  });
-});
+// Render Add Product Page
+router.get(
+  '/products/add',
+  isAuthenticated,
+  isAdmin,
+  (req, res) => {
+    res.render('admin/add-product', {
+      user: req.session.user,
+      active: 'manageProducts'
+    });
+  }
+);
 
 router.post(
   '/products/add',
