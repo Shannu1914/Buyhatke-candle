@@ -23,7 +23,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Upload profile image
 // Upload profile image using multer
 router.post('/profile/upload', isAuthenticated, upload.single('profileImage'), async (req, res) => {
   try {
@@ -31,6 +30,8 @@ router.post('/profile/upload', isAuthenticated, upload.single('profileImage'), a
       req.flash('error_msg', 'No file uploaded');
       return res.redirect('/user/profile');
     }
+    
+    console.log('Uploaded file:', req.file);
 
     const user = await User.findById(req.session.user._id);
     if (!user) {
