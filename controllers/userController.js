@@ -66,3 +66,59 @@ exports.uploadProfileImage = async (req, res) => {
 
   res.redirect('/user/profile');
 };
+
+// DELETE PROFILE IMAGE
+exports.deleteProfileImage = async (req, res) => {
+  try {
+    if (!req.session.user) return res.redirect('/login');
+
+    const user = await User.findById(req.session.user._id);
+    if (!user) return res.redirect('/login');
+
+    // Delete old image file if exists
+    if (user.profileImage && user.profileImage !== '/uploads/profiles/default-profile.png') {
+      const filePath = path.join(__dirname, '..', 'public', user.profileImage);
+      fs.unlink(filePath, err => { if(err) console.error(err); });
+    }
+
+    // Set default image
+    user.profileImage = '/uploads/profiles/default-profile.png';
+    await user.save();
+
+    // Update session
+    req.session.user.profileImage = user.profileImage;
+
+    res.redirect('/user/profile');
+  } catch (err) {
+    console.error(err);
+    res.redirect('/user/profile');
+  }
+};
+
+// DELETE ACCOUNT
+exports.deleteAccount = async (req, res) => {
+  try {
+    if (!req.session.user) return res.redirect('/login');
+
+    const user = await User.findById(req.session.user._id);
+    if (!user) return res.redirect('/login');
+
+    // Delete profile image file if exists
+    if (user.profileImage && user.profileImage !== '/uploads/profiles/default-profile.png') {
+      const filePath = path.join(__dirname, '..', 'public', user.profileImage);
+      fs.unlink(filePath, err => { if(err) console.error(err); });
+    }
+
+    // Delete user from DB
+    await User.deleteOne({ _id: user._id });
+
+    // Destroy session
+    req.session.destroy(err => {
+      if (err) console.error(err);
+      res.redirect('/');
+    });
+  } catch (err) {
+    console.error(err);
+    res.redirect('/user/profile');
+  }
+};

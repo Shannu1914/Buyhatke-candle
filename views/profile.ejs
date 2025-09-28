@@ -21,9 +21,29 @@
         <p><strong>Joined:</strong> <%= user.createdAt ? user.createdAt.toDateString() : 'N/A' %></p>
       </div>
 
+      <div class="profile-actions" style="margin-top: 20px; display:flex; gap:10px;">
+        <!-- Delete Profile Image -->
+        <form action="/user/profile/delete-image" method="POST">
+          <button type="submit" class="btn btn-danger">🗑 Delete Profile Picture</button>
+        </form>
+
+        <!-- Delete Account -->
+        <form action="/user/delete-account" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
+          <button type="submit" class="btn btn-danger">❌ Delete Account</button>
+        </form>
+      </div>
+
       <a href="/user/dashboard" class="btn btn-outline">Back to Dashboard</a>
     </div>
   </div>
+
+  <% if (locals.success_msg) { %>
+    <div class="alert alert-success"><%= success_msg %></div>
+  <% } %>
+  <% if (locals.error_msg) { %>
+    <div class="alert alert-danger"><%= error_msg %></div>
+  <% } %>
+  
 </section>
 
 <script>

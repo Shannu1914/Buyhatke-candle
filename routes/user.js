@@ -54,7 +54,11 @@ router.post('/profile/upload', isAuthenticated, upload.single('profileImage'), a
     res.redirect('/user/profile');
   }
 });
+// Delete profile picture
+router.post('/profile/delete-image', isAuthenticated, userController.deleteProfileImage);
 
+// Delete account
+router.post('/delete-account', isAuthenticated, userController.deleteAccount);
 
 // ------------------ User Dashboard ------------------//
 router.get('/dashboard', isAuthenticated, async (req, res) => {
