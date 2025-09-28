@@ -29,6 +29,15 @@ a {
   text-decoration: none;
   color: #007bff;
 }
+a.btn-outline {
+  margin-top: 15px;
+  display: inline-block;
+}
+a.btn-outline:hover {
+  background: #d63384;
+  color: #fff;
+}
+
 a:hover {
   color: #0056b3;
 }
@@ -332,17 +341,56 @@ header {
 .about-wrapper h2, .about-wrapper h3 { margin-top: 30px; font-weight: 700; }
 .about-wrapper p { margin-top: 10px; color: #444; }
 
+/* Profile Card Container */
+.profile-card {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 25px;
+  flex-wrap: wrap;
+  background: #fff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  width: 100%;
+  max-width: 450px;
+}
+
+.profile-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
 /* === Profile === */
 .profile-photo {
-  width: 150px;
-  height: 150px;
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #ccc;
 }
-.profile-name { font-size: 1.8rem; font-weight: 700; }
+.profile-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;  
+}
 .profile-role { font-size: 1.1rem; color: #666; }
-.profile-details { font-size: 1rem; color: #333; }
+.profile-details p {
+  margin: 6px 0;
+  font-size: 1rem;
+  color: #444;
+}
+.profile-info {
+  flex: 1;
+  min-width: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  align-items: center;
+}
 .profile-info form {
   margin-top: 20px;
   display: flex;
@@ -351,7 +399,20 @@ header {
 }
 .profile-photo-container {
   position: relative;
-  display: inline-block;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 4px solid #ff6600;
+  margin: 0 auto;
+  flex-shrink: 0;
+}
+.profile-upload-form {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  background: rgba(0,0,0,0.4);
 }
 .profile-upload-form input[type="file"] {
   display: none;
@@ -363,6 +424,32 @@ header {
 
 
 /* === Auth & Upload Sections === */
+.auth-card.profile-card {
+  max-width: 600px;
+  width: 100%;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  text-align: center;
+}
+.auth-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  min-height: 80vh;
+}
+
+.auth-section, .user-dashboard.container {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  padding: 60px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 30px;
+}
 .auth-section, .upload-section {
   background: url('/images/bg.jpg') center/cover no-repeat;
   min-height: calc(100vh - 140px);
@@ -525,16 +612,17 @@ header {
 
 .btn-upload-overlay {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 8px 0;
   background-color: rgba(0,0,0,0.6);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
+  color: #fff;
+  font-size: 0.95rem;
   cursor: pointer;
-  font-size: 0.9rem;
+  border: none;
   display: none;
+  text-align: center;
 }
 
 .btn-upload {
@@ -939,6 +1027,18 @@ header {
 }
 
 /* Dashboard Management Grid */
+.dashboard-tabs {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.dashboard-tabs .btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+}
 .dashboard-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -946,7 +1046,53 @@ header {
   width: 100%;
 }
 
+/* Orders & Return Cards */
+.order-card, .return-cards div {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.order-card img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.order-card .status-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.status-pending { background: #ff9800; }
+.status-shipped { background: #2196f3; }
+.status-delivered { background: #4caf50; }
+.status-cancelled { background: #f44336; }
+
+/* Buttons in Cards */
+.order-card a.btn, .return-cards a.btn {
+  padding: 8px 14px;
+  font-size: 0.9rem;
+}
+
 /* Table responsive for mobile */
+.tab-content {
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+}
+.tab-content:first-child {
+  display: flex;
+}
+
 .table-responsive {
   overflow-x: auto;
 }
@@ -1049,6 +1195,27 @@ header {
     width: 90%;       
   }
 }
+@media (max-width: 900px) {
+  .profile-card {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-info { align-items: center; text-align: center; }
+
+  .hero-right img {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .dashboard-tabs { flex-direction: column; gap: 10px; }
+}
+
+@media (max-width: 500px) {
+  .profile-photo-container { width: 120px; height: 120px; }
+  .profile-name { font-size: 1.5rem; }
+  .profile-role { font-size: 1rem; }
+}
 
 @media (max-width: 992px) {
   .product-grid { grid-template-columns: repeat(2, 1fr); }
@@ -1062,6 +1229,15 @@ header {
   .hero-right img { width: 100%; max-width: 350px; }
   .footer-container { grid-template-columns: 1fr; text-align: center; }
   .brand, .social-icons { justify-content: center; }
+  .profile-card {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+  }
+  .profile-photo-container {
+    width: 120px;
+    height: 120px;
+  }
 }
 @media (min-width: 769px) {
   .social-icons a i {

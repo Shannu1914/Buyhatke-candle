@@ -4,12 +4,12 @@
   <div class="auth-card profile-card">
     <h1>My Profile</h1>
 
-    <div class="profile-info">
+    <div class="profile-info">  
       <div class="profile-photo-container">
-        <img src="<%= user.profileImage ? user.profileImage : '/uploads/profiles/default-profile.png' %>"  alt="Profile Photo" class="profile-photo" />
+        <img src="<%= user.profileImage || '/uploads/profiles/default-profile.png' %>"  alt="Profile Photo" class="profile-photo" />
         <form action="/user/profile/upload" method="POST" enctype="multipart/form-data" class="profile-upload-form">
-          <input type="file" name="profileImage" accept="image/*" required />
-          <button type="submit" class="btn btn-primary btn-upload">Change Photo</button>
+          <input type="file" name="profileImage" accept="image/*" id="profileImageInput" hidden />
+          <button type="button" class="btn btn-upload-overlay" onclick="document.getElementById('profileImageInput').click();">📷 Change</button>
         </form>
       </div>
 
@@ -26,4 +26,14 @@
   </div>
 </section>
 
+<script>
+  const profileInput = document.getElementById('profileImageInput');
+  const profileForm = document.querySelector('.profile-upload-form');
+
+  profileInput.addEventListener('change', () => {
+    if(profileInput.files.length > 0){
+      profileForm.submit(); // submit form automatically
+    }
+  });
+</script>
 <%- include('partials/footer') %>

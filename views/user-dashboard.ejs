@@ -94,40 +94,49 @@
     <% } %>
   </div>
 
-  <!-- Profile Tab -->
-  <div id="profile" class="tab-content" style="display:none;">
-    <h2 style="margin-bottom:20px;">My Profile</h2>
-    <div class="profile-card" style="background:#fff; padding:25px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.1); display:flex; flex-wrap: wrap; gap:25px; align-items:center;">
-      <img src="<%= user.profileImage || '/images/default-profile.png' %>" alt="Profile Photo" class="profile-photo" style="width:160px; height:160px; border-radius:50%; border:4px solid #ff6600; object-fit:cover;"/>
-      <div class="profile-info">
+    <!-- Profile Tab -->
+    <div id="profile" class="tab-content" style="display:none;">
+      <h2 style="margin-bottom:20px;">My Profile</h2>
+
+      <div class="profile-card">
+
+        <!-- Left: Profile Image with Upload -->
         <div class="profile-photo-container">
-          <img src="<%= user.profileImage || '/uploads/profiles/default-profile.png' %>" alt="Profile Photo" class="profile-photo"/>
+          <img src="<%= user.profileImage || '/uploads/profiles/default-profile.png' %>" alt="Profile Photo" class="profile-photo" />
           <form action="/user/profile/upload" method="POST" enctype="multipart/form-data" class="profile-upload-form">
-            <input type="file" name="profileImage" accept="image/*" required />
-            <button type="submit" class="btn btn-upload-overlay">📷 Change</button>
+            <input type="file" name="profileImage" accept="image/*" id="profileImageInput" hidden />
+            <button type="button" class="btn btn-upload-overlay" onclick="document.getElementById('profileImageInput').click();">📷 Change</button>
           </form>
         </div>
 
-        <h2 class="profile-name"><%= user.name %></h2>
-        <p class="profile-role"><%= user.isAdmin ? 'Administrator' : 'User' %></p>
-      </div>
+        <!-- Right: Profile Info -->
+        <div class="profile-info">
+          <h2 class="profile-name"><%= user.name %></h2>
+          <p class="profile-role"><%= user.isAdmin ? 'Administrator' : 'User' %></p>
 
-      <div style="flex:1; min-width:220px;">
-        <h2 class="profile-name" style="font-size:1.6rem; font-weight:700; color:#333;"><%= user.name %></h2>
-        <p class="profile-role" style="color:#555; margin-bottom:15px;"><%= user.isAdmin ? 'Administrator' : 'User' %></p>
+          <div class="profile-details">
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Joined:</strong> <%= user.createdAt?.toDateString() || 'N/A' %></p>
+          </div>
 
-        <div class="profile-details" style="font-size:1rem; color:#444;">
-          <p><strong>Email:</strong> <%= user.email %></p>
-          <p><strong>Joined:</strong> <%= user.createdAt?.toDateString() || 'N/A' %></p>
+          <a href="/user/profile" class="btn btn-outline">Edit Profile</a>
         </div>
-
-        <a href="/user/profile" class="btn btn-outline" style="margin-top:15px;">Edit Profile</a>
       </div>
     </div>
-  </div>
+
 </section>
 
 <script>
+  const profileInput = document.getElementById('profileImageInput');
+  const profileForm = document.querySelector('.profile-upload-form');
+
+  profileInput.addEventListener('change', () => {
+    if(profileInput.files.length > 0){
+      profileForm.submit(); // submit form automatically
+    }
+  });
+
+
   function showTab(tabId) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
     document.getElementById(tabId).style.display = 'block';

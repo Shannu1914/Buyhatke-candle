@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Order = require('../models/Order');
+const Category = require('../models/Category');
 
 // Admin Dashboard
 exports.dashboard = async (req, res) => {
@@ -47,18 +48,30 @@ exports.listProducts = async (req, res) => {
   }
 };
 
+exports.addProductForm = async (req, res) => {
+  const categories = await Category.find().lean();
+  res.render('add-product', { categories });
+};
+
 // Add new product
 exports.addProduct = async (req, res) => {
   try {
-    const { name, description, price, stock } = req.body;
+    const { name, description, category, price, stock } = req.body;
     const image = req.file ? req.file.filename : null;
+
+    if (req.files && req.files.image) {
+      const image = req.files.image;
+      imagePath = '/uploads/products/' + image.name;
+      await image.mv('./public' + imagePath);
+    }
 
     const product = new Product({
       name,
       description,
+      category,
       price,
       stock,
-      image,
+      image: imagePath,
     });
 
     await product.save();

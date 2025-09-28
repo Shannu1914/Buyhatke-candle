@@ -17,6 +17,19 @@
         <textarea name="description" id="description" rows="4" required></textarea>
       </div>
 
+      <!-- Category -->
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select name="category" id="category" required>
+          <option value="">Select Category</option>
+          <% categories.forEach(cat => { %>
+            <option value="<%= cat.name %>"><%= cat.name %></option>
+          <% }) %>
+        </select>
+        <small>Or type a new category below:</small>
+        <input type="text" name="newCategory" placeholder="New Category (optional)">
+      </div>
+
       <!-- Price -->
       <div class="form-group">
         <label for="price">Price (₹)</label>

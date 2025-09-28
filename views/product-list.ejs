@@ -15,6 +15,15 @@
     <button type="submit">Search</button>
   </form>
 
+  <!-- Category Filter -->
+  <form method="GET" action="/products" class="category-form">
+    <select name="category" onchange="this.form.submit()">
+      <option value="">All Categories</option>
+      <% categories.forEach(cat => { %>
+        <option value="<%= cat.name %>" <%= selectedCategory === cat.name ? 'selected' : '' %>><%= cat.name %></option>
+      <% }) %>
+    </select>
+  </form>
 
   <% if (products.length === 0) { %>
     <p>No products found.</p>
@@ -27,6 +36,7 @@
                  alt="<%= product.name %>" 
                  class="product-img" />
           </div>
+          <p class="product-category"><%= product.category %></p> 
           <h3><%= product.name %></h3>
           <p>₹<%= product.price %></p>
           <a href="/products/<%= product._id %>" class="btn btn-secondary">View</a>

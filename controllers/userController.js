@@ -1,4 +1,6 @@
 const User = require('../models/User');
+const path = require('path');
+const fs = require('fs');
 
 exports.dashboard = async (req, res) => {
   try {
@@ -38,3 +40,29 @@ exports.profile = async (req, res) => {
   }
 };
 
+exports.uploadProfileImage = async (req, res) => {
+  if (!req.files || !req.files.profileImage) {
+    return res.redirect('/user/profile');
+  }
+
+  const image = req.files.profileImage;
+  const uploadPath = path.join(__dirname, '..', 'public/uploads/profiles', image.name);
+
+  // Delete old image if exists in session user
+  if (req.session.user.profileImage && req.session.user.profileImage !== '/uploads/profiles/default-profile.png') {
+    fs.unlink(path.join(__dirname, '..', 'public', req.session.user.profileImage), err => {});
+  }
+
+  // Save new image
+  await image.mv(uploadPath);
+
+  // Update user in DB
+  const user = await User.findById(req.session.user._id);
+  user.profileImage = '/uploads/profiles/' + image.name;
+  await user.save();
+
+  // Update session user
+  req.session.user.profileImage = user.profileImage;
+
+  res.redirect('/user/profile');
+};
