@@ -1,51 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const Product = require('../models/Product');
+const productController = require('../controllers/productController');
 
-// Product list with optional search
-router.get('/', async (req, res) => {
-  try {
-    const search = req.query.search || '';
-    let query = {};
+// 🏠 Home page — shows categories & featured products
+router.get('/home', productController.home);
 
-    if (search) {
-      query = { name: { $regex: search, $options: 'i' } }; // case-insensitive search
-    }
+// 🛍️ Shop page — with search & category filter
+router.get('/', productController.listProducts);
 
-    const products = await Product.find(query);
-
-    res.render('product-list', {
-      products,
-      search,
-      user: req.session.user || null,
-      active: 'products'
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server error');
-  }
-});
-
-// ✅ Product detail page
-router.get('/:id', async (req, res) => {
-  try {
-    const product = await Product.findById(req.params.id);
-    if (!product) {
-      req.flash('error_msg', 'Product not found');
-      return res.redirect('/products');
-    }
-
-    res.render('product-view', {
-      product,
-      user: req.session.user || null,
-      active: 'products'
-    });
-
-  } catch (err) {
-    console.error('Error loading product detail:', err);
-    req.flash('error_msg', 'Error loading product');
-    res.redirect('/products');
-  }
-});
+// 👁️ Single product view
+router.get('/:id', productController.viewProduct);
 
 module.exports = router;
