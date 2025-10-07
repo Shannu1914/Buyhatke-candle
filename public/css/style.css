@@ -339,6 +339,14 @@ header {
   text-align: center;
 }
 .about-wrapper h2, .about-wrapper h3 { margin-top: 30px; font-weight: 700; }
+.about-wrapper .profile-photo {
+  width: 200px;         /* fixed width */
+  height: 200px;        /* fixed height to make it square */
+  border-radius: 50%;   /* make it circular */
+  object-fit: cover;    /* maintain aspect ratio, cover container */
+  border: 3px solid #ff6600;
+  margin: 0 auto 20px;  /* center and spacing */
+}
 .about-wrapper p { margin-top: 10px; color: #444; }
 
 /* Profile Card Container */
@@ -1241,6 +1249,10 @@ header {
   .profile-photo-container { width: 120px; height: 120px; }
   .profile-name { font-size: 1.5rem; }
   .profile-role { font-size: 1rem; }
+  .about-wrapper .profile-photo {
+    width: 120px;
+    height: 120px;
+  }
 }
 
 @media (max-width: 992px) {
@@ -1318,6 +1330,10 @@ header {
     flex-direction: column;
     gap: 8px;
     margin-top: 10px;
+  }
+  .about-wrapper .profile-photo {
+    width: 150px;
+    height: 150px;
   }
 
   /* Hero Section */
